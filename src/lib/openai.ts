@@ -207,7 +207,9 @@ Responde SOLO con el JSON, sin texto adicional:`;
 
     // Intentar parsear el JSON
     try {
-      return JSON.parse(response);
+      // Strip markdown code block delimiters if present
+      const cleanedResponse = response.replace(/```json\s*|\s*```/g, '').trim();
+      return JSON.parse(cleanedResponse);
     } catch (parseError) {
       console.error('Error parsing analysis JSON:', parseError);
       // Fallback analysis si el JSON no es válido
