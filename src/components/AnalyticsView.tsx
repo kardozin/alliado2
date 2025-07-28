@@ -9,8 +9,8 @@ interface AnalyticsViewProps {
 
 export function AnalyticsView({ publications, activeProject }: AnalyticsViewProps) {
   const [timeFilter, setTimeFilter] = useState('all');
-  const [metricFilter, setMetricFilter] = useState('tone');
-  const [showAdvancedMetrics, setShowAdvancedMetrics] = useState(false);
+  const [analysisFilter, setAnalysisFilter] = useState('tone');
+  const [showWritingInsights, setShowWritingInsights] = useState(false);
 
   if (!activeProject) {
     return (
@@ -26,14 +26,7 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
 
   const projectPublications = publications.filter(pub => pub.projectId === activeProject.id);
 
-  // Analytics calculations
-  const totalViews = projectPublications.reduce((sum, pub) => sum + (pub.performance?.views || 0), 0);
-  const totalEngagement = projectPublications.reduce((sum, pub) => sum + (pub.performance?.engagement || 0), 0);
-  const avgEngagementRate = projectPublications.length > 0 
-    ? (totalEngagement / totalViews * 100).toFixed(1) 
-    : '0';
-  
-  // Advanced analytics calculations
+  // Writing analytics calculations
   const avgReadability = projectPublications.length > 0
     ? (projectPublications.reduce((sum, pub) => sum + (pub.analysis.readability || 0), 0) / projectPublications.length).toFixed(1)
     : '0';
@@ -42,13 +35,17 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
     ? (projectPublications.reduce((sum, pub) => sum + (pub.analysis.seoScore || 0), 0) / projectPublications.length).toFixed(1)
     : '0';
   
+  const avgVoiceConsistency = projectPublications.length > 0
+    ? (projectPublications.reduce((sum, pub) => sum + (pub.analysis.voiceConsistency?.score || 0), 0) / projectPublications.length).toFixed(1)
+    : '0';
+  
   const contentVelocity = projectPublications.length > 0
     ? (projectPublications.length / Math.max(1, Math.ceil((Date.now() - Math.min(...projectPublications.map(p => p.publishedAt.getTime()))) / (1000 * 60 * 60 * 24 * 30)))).toFixed(1)
     : '0';
-  
-  const topPerformingContent = projectPublications
-    .filter(pub => pub.performance)
-    .sort((a, b) => (b.performance?.views || 0) - (a.performance?.views || 0))
+
+  const mostConsistentContent = projectPublications
+    .filter(pub => pub.analysis.voiceConsistency)
+    .sort((a, b) => (b.analysis.voiceConsistency?.score || 0) - (a.analysis.voiceConsistency?.score || 0))
     .slice(0, 3);
 
   // Tone distribution
@@ -75,8 +72,21 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
     .sort(([,a], [,b]) => b - a)
     .slice(0, 10);
 
+  // Writing style patterns
+  const writingPatterns = projectPublications.reduce((acc, pub) => {
+    if (pub.analysis.writingStyle?.writingPatterns) {
+      pub.analysis.writingStyle.writingPatterns.forEach(pattern => {
+        acc[pattern] = (acc[pattern] || 0) + 1;
+      });
+    }
+    return acc;
+  }, {} as Record<string, number>);
+
+  const topWritingPatterns = Object.entries(writingPatterns)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 5);
   const getDistributionData = () => {
-    return metricFilter === 'tone' ? toneDistribution : emotionDistribution;
+    return analysisFilter === 'tone' ? toneDistribution : emotionDistribution;
   };
 
   const getColorForIndex = (index: number) => {
@@ -113,15 +123,15 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
               </select>
             </div>
             <button
-              onClick={() => setShowAdvancedMetrics(!showAdvancedMetrics)}
-              className={`px-4 py-3 rounded-lg border transition-all duration-200 flex items-center space-x-2 ${
-                showAdvancedMetrics 
-                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' 
-                  : 'bg-gray-900/50 border-gray-800/60 text-gray-400 hover:text-gray-200'
+              onClick={() => setShowWritingInsights(!showWritingInsights)}
+              className={`px-4 py-3 rounded-lg border-gray-800/60 transition-all duration-200 flex items-center space-x-2 ${
+                showWritingInsights 
+                  ? 'bg-amber-500/10 text-amber-400' 
+                  : 'bg-gray-900/50 text-gray-400 hover:text-gray-200'
               }`}
             >
-              <Brain className="w-4 h-4" />
-              <span>Métricas Avanzadas</span>
+              <Eye className="w-4 h-4" />
+              <span>Análisis de Escritura</span>
             </button>
           </div>
         </div>
@@ -139,56 +149,44 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
         ) : (
           <div className="space-y-8">
             {/* Key Metrics */}
-            <div className={`grid gap-6 ${showAdvancedMetrics ? 'grid-cols-1 md:grid-cols-4 lg:grid-cols-8' : 'grid-cols-1 md:grid-cols-4'}`}>
+            <div className={`grid gap-6 ${showWritingInsights ? 'grid-cols-1 md:grid-cols-4 lg:grid-cols-6' : 'grid-cols-1 md:grid-cols-4'}`}>
               {[
                 {
                   label: 'Total Publicaciones',
                   value: projectPublications.length.toString(),
-                  icon: BarChart3,
+                  icon: FileText,
                   color: 'blue'
                 },
                 {
-                  label: 'Total Vistas',
-                  value: totalViews.toLocaleString(),
-                  icon: TrendingUp,
+                  label: 'Legibilidad Promedio',
+                  value: `${avgReadability}%`,
+                  icon: Eye,
+                  color: 'blue'
+                },
+                {
+                  label: 'SEO Score Promedio',
+                  value: `${avgSeoScore}%`,
+                  icon: Target,
                   color: 'green'
                 },
                 {
-                  label: 'Interacciones',
-                  value: totalEngagement.toString(),
-                  icon: Activity,
+                  label: 'Consistencia de Voz',
+                  value: `${avgVoiceConsistency}%`,
+                  icon: Brain,
                   color: 'purple'
                 },
-                {
-                  label: 'Tasa de Interacción',
-                  value: `${avgEngagementRate}%`,
-                  icon: PieChart,
-                  color: 'amber'
-                },
-                ...(showAdvancedMetrics ? [
+                ...(showWritingInsights ? [
                   {
-                    label: 'Legibilidad Promedio',
-                    value: `${avgReadability}%`,
-                    icon: Eye,
-                    color: 'purple'
-                  },
-                  {
-                    label: 'SEO Score Promedio',
-                    value: `${avgSeoScore}%`,
-                    icon: Target,
-                    color: 'green'
-                  },
-                  {
-                    label: 'Velocidad de Contenido',
+                    label: 'Artículos por Mes',
                     value: `${contentVelocity}/mes`,
                     icon: Zap,
-                    color: 'blue'
+                    color: 'amber'
                   },
                   {
-                    label: 'Mejor Rendimiento',
-                    value: topPerformingContent[0] ? `${topPerformingContent[0].performance?.views.toLocaleString()}` : '0',
-                    icon: TrendingUp,
-                    color: 'red'
+                    label: 'Patrones Únicos',
+                    value: topWritingPatterns.length.toString(),
+                    icon: Activity,
+                    color: 'indigo'
                   }
                 ] : [])
               ].map((metric, index) => {
@@ -214,13 +212,13 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
             </div>
 
             {/* Advanced Metrics Section */}
-            {showAdvancedMetrics && (
+            {showWritingInsights && (
               <div className="space-y-8">
-                {/* Content Performance Ranking */}
-                <div className="glass-effect rounded-xl border nyt-border p-6 animate-slide-up">
-                  <h3 className="text-xl font-semibold serif text-gray-100 mb-6">Top Contenido por Rendimiento</h3>
+                {/* Voice Consistency Ranking */}
+                <div className="bg-gray-900/30 rounded-xl border-gray-800/50 p-6 animate-slide-up">
+                  <h3 className="text-xl font-semibold serif text-gray-100 mb-6">Contenido Más Consistente</h3>
                   <div className="space-y-4">
-                    {topPerformingContent.map((publication, index) => {
+                    {mostConsistentContent.map((publication, index) => {
                       const rank = index + 1;
                       const getRankColor = (rank: number) => {
                         switch (rank) {
@@ -234,7 +232,7 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                       return (
                         <div 
                           key={publication.id} 
-                          className="flex items-center space-x-4 p-4 bg-gray-900/30 rounded-xl hover:bg-gray-800/40 transition-all duration-200 animate-fade-in"
+                          className="flex items-center space-x-4 p-4 bg-gray-800/30 rounded-xl hover:bg-gray-700/40 transition-all duration-200 animate-fade-in"
                           style={{ animationDelay: `${index * 100}ms` }}
                         >
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${getRankColor(rank)}`}>
@@ -249,8 +247,8 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="text-lg font-bold text-gray-100">{publication.performance?.views.toLocaleString()}</p>
-                            <p className="text-xs text-gray-400">{publication.performance?.engagement} interacciones</p>
+                            <p className="text-lg font-bold text-gray-100">{publication.analysis.voiceConsistency?.score || 0}%</p>
+                            <p className="text-xs text-gray-400">Consistencia de voz</p>
                           </div>
                         </div>
                       );
@@ -258,12 +256,12 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                   </div>
                 </div>
 
-                {/* Content Quality Trends */}
-                <div className="glass-effect rounded-xl border nyt-border p-6 animate-slide-up">
-                  <h3 className="text-xl font-semibold serif text-gray-100 mb-6">Tendencias de Calidad</h3>
+                {/* Writing Style Patterns */}
+                <div className="bg-gray-900/30 rounded-xl border-gray-800/50 p-6 animate-slide-up">
+                  <h3 className="text-xl font-semibold serif text-gray-100 mb-6">Patrones de Escritura</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-gray-900/30 rounded-xl p-6">
-                      <h4 className="font-semibold text-gray-100 mb-4">Legibilidad por Mes</h4>
+                      <h4 className="font-semibold text-gray-100 mb-4">Evolución de Legibilidad</h4>
                       <div className="space-y-3">
                         {projectPublications.slice(0, 3).map((pub, index) => (
                           <div key={pub.id} className="flex items-center justify-between">
@@ -283,7 +281,7 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                     </div>
 
                     <div className="bg-gray-900/30 rounded-xl p-6">
-                      <h4 className="font-semibold text-gray-100 mb-4">SEO Score Evolución</h4>
+                      <h4 className="font-semibold text-gray-100 mb-4">Consistencia de Voz</h4>
                       <div className="space-y-3">
                         {projectPublications.slice(0, 3).map((pub, index) => (
                           <div key={pub.id} className="flex items-center justify-between">
@@ -291,11 +289,11 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                             <div className="flex items-center space-x-2">
                               <div className="w-16 bg-gray-800 rounded-full h-2">
                                 <div 
-                                  className="bg-green-500 h-2 rounded-full transition-all duration-1000"
-                                  style={{ width: `${pub.analysis.seoScore || 0}%` }}
+                                  className="bg-purple-500 h-2 rounded-full transition-all duration-1000"
+                                  style={{ width: `${pub.analysis.voiceConsistency?.score || 0}%` }}
                                 ></div>
                               </div>
-                              <span className="text-sm text-gray-300 w-8">{pub.analysis.seoScore || 0}%</span>
+                              <span className="text-sm text-gray-300 w-8">{pub.analysis.voiceConsistency?.score || 0}%</span>
                             </div>
                           </div>
                         ))}
@@ -303,29 +301,55 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                     </div>
 
                     <div className="bg-gray-900/30 rounded-xl p-6">
-                      <h4 className="font-semibold text-gray-100 mb-4">Engagement Rate</h4>
+                      <h4 className="font-semibold text-gray-100 mb-4">Calidad SEO</h4>
                       <div className="space-y-3">
                         {projectPublications.slice(0, 3).map((pub, index) => {
-                          const engagementRate = pub.performance 
-                            ? ((pub.performance.engagement / pub.performance.views) * 100).toFixed(1)
-                            : '0';
+                          const seoScore = pub.analysis.seoScore || 0;
                           return (
                             <div key={pub.id} className="flex items-center justify-between">
                               <span className="text-sm text-gray-400">{pub.publishedAt.toLocaleDateString()}</span>
                               <div className="flex items-center space-x-2">
                                 <div className="w-16 bg-gray-800 rounded-full h-2">
                                   <div 
-                                    className="bg-blue-500 h-2 rounded-full transition-all duration-1000"
-                                    style={{ width: `${Math.min(100, parseFloat(engagementRate) * 10)}%` }}
+                                    className="bg-green-500 h-2 rounded-full transition-all duration-1000"
+                                    style={{ width: `${seoScore}%` }}
                                   ></div>
                                 </div>
-                                <span className="text-sm text-gray-300 w-8">{engagementRate}%</span>
+                                <span className="text-sm text-gray-300 w-8">{seoScore}%</span>
                               </div>
                             </div>
                           );
                         })}
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Writing Patterns */}
+                <div className="bg-gray-900/30 rounded-xl border-gray-800/50 p-6 animate-slide-up">
+                  <h3 className="text-xl font-semibold serif text-gray-100 mb-6">Patrones de Escritura Únicos</h3>
+                  <div className="space-y-4">
+                    {topWritingPatterns.map(([pattern, count], index) => {
+                      const percentage = ((count / projectPublications.length) * 100).toFixed(1);
+                      return (
+                        <div 
+                          key={pattern} 
+                          className="flex items-center justify-between animate-fade-in"
+                          style={{ animationDelay: `${index * 100}ms` }}
+                        >
+                          <span className="text-sm font-medium text-gray-300">{pattern}</span>
+                          <div className="flex items-center space-x-3">
+                            <div className="w-24 bg-gray-800 rounded-full h-2">
+                              <div 
+                                className="bg-indigo-500 h-2 rounded-full transition-all duration-1000"
+                                style={{ width: `${percentage}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-sm text-gray-400 w-8 text-right font-medium">{count}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -337,9 +361,9 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-semibold serif text-gray-100">Distribución de Contenido</h3>
                   <select
-                    value={metricFilter}
-                    onChange={(e) => setMetricFilter(e.target.value)}
-                    className="px-3 py-2 bg-gray-900/50 border nyt-border rounded-lg text-sm text-gray-100 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                    value={analysisFilter}
+                    onChange={(e) => setAnalysisFilter(e.target.value)}
+                    className="px-3 py-2 bg-gray-900/50 border-gray-800/60 rounded-lg text-sm text-gray-100 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
                   >
                     <option value="tone">Por Tono</option>
                     <option value="emotion">Por Emoción</option>
@@ -404,7 +428,7 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
             </div>
 
             {/* Recent Publications Timeline */}
-            <div className="glass-effect rounded-xl border nyt-border p-6 animate-slide-up">
+            <div className="bg-gray-900/30 rounded-xl border-gray-800/50 p-6 animate-slide-up">
               <h3 className="text-xl font-semibold serif text-gray-100 mb-6">Línea de Tiempo Editorial</h3>
               <div className="space-y-4">
                 {projectPublications
@@ -413,7 +437,7 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                   .map((publication, index) => (
                     <div 
                       key={publication.id} 
-                      className="flex items-center space-x-6 p-5 bg-gray-900/30 rounded-xl hover:bg-gray-800/40 transition-all duration-200 animate-fade-in"
+                      className="flex items-center space-x-6 p-5 bg-gray-800/30 rounded-xl hover:bg-gray-700/40 transition-all duration-200 animate-fade-in"
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       <div className="flex-1">
@@ -424,12 +448,10 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                           <span className="text-sm text-gray-500">{publication.analysis.tone}</span>
                         </div>
                       </div>
-                      {publication.performance && (
-                        <div className="text-right">
-                          <p className="text-lg font-bold text-gray-100">{publication.performance.views.toLocaleString()}</p>
-                          <p className="text-xs text-gray-400">vistas • {publication.performance.engagement} interacciones</p>
-                        </div>
-                      )}
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-gray-100">{publication.analysis.readability || 0}%</p>
+                        <p className="text-xs text-gray-400">legibilidad • {publication.analysis.seoScore || 0}% SEO</p>
+                      </div>
                     </div>
                   ))}
               </div>

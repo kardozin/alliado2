@@ -54,6 +54,17 @@ export interface ContentAnalysis {
   keyThemes: string[];
   seoScore?: number;
   suggestedKeywords?: string[];
+  writingStyle?: {
+    vocabularyLevel: string;
+    sentenceComplexity: string;
+    commonPhrases: string[];
+    writingPatterns: string[];
+  };
+  voiceConsistency?: {
+    score: number;
+    deviations: string[];
+    recommendations: string[];
+  };
 }
 
 export interface Publication {
@@ -64,11 +75,6 @@ export interface Publication {
   platform: string;
   publishedAt: Date;
   analysis: ContentAnalysis;
-  performance?: {
-    views: number;
-    engagement: number;
-    shares: number;
-  };
 }
 
 export type ViewMode = 'projects' | 'ideas' | 'drafts' | 'publications' | 'analytics';

@@ -98,24 +98,20 @@ export function PublicationsView({ publications, activeProject }: PublicationsVi
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-300 serif">Publicaciones</h2>
               <div className="flex items-center space-x-2">
-                {connectedPlatforms.slice(0, 3).map((platform, index) => {
-                  const Icon = getPlatformIcon(platform);
-                  return (
-                    <div 
-                      key={platform}
-                      className="w-6 h-6 bg-gray-800/50 rounded-full flex items-center justify-center animate-fade-in"
-                      style={{ animationDelay: `${index * 100}ms` }}
-                      title={`Conectado: ${platform}`}
-                    >
-                      <Icon className="w-3 h-3 text-gray-400" />
-                    </div>
-                  );
-                })}
-                {connectedPlatforms.length > 3 && (
-                  <div className="w-6 h-6 bg-gray-800/50 rounded-full flex items-center justify-center text-xs text-gray-400">
-                    +{connectedPlatforms.length - 3}
+                <div className="grid grid-cols-3 gap-6 bg-gray-900/30 rounded-xl p-6 animate-slide-up">
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-gray-100 mb-1">{selectedPublication.analysis.readability || 0}%</p>
+                    <p className="text-sm text-gray-400 font-medium">Legibilidad</p>
                   </div>
-                )}
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-gray-100 mb-1">{selectedPublication.analysis.seoScore || 0}%</p>
+                    <p className="text-sm text-gray-400 font-medium">SEO Score</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-gray-100 mb-1">{selectedPublication.analysis.voiceConsistency?.score || 0}%</p>
+                    <p className="text-sm text-gray-400 font-medium">Consistencia</p>
+                  </div>
+                </div>
               </div>
             </div>
             {filteredPublications.map((publication, index) => (

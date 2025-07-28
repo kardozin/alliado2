@@ -102,12 +102,18 @@ export const mockPublications: Publication[] = [
       tone: 'Educativo',
       emotion: 'Confianza',
       readability: 82,
-      keyThemes: ['Validación', 'Startup', 'MVP', 'Mercado']
-    },
-    performance: {
-      views: 2450,
-      engagement: 156,
-      shares: 23
+      keyThemes: ['Validación', 'Startup', 'MVP', 'Mercado'],
+      writingStyle: {
+        vocabularyLevel: 'Intermedio',
+        sentenceComplexity: 'Moderada',
+        commonPhrases: ['es importante', 'debemos considerar', 'en este contexto'],
+        writingPatterns: ['Uso de ejemplos prácticos', 'Estructura paso a paso']
+      },
+      voiceConsistency: {
+        score: 85,
+        deviations: ['Tono más técnico en párrafo 3'],
+        recommendations: ['Mantener lenguaje accesible']
+      }
     }
   },
   {
@@ -121,12 +127,18 @@ export const mockPublications: Publication[] = [
       tone: 'Inspiracional',
       emotion: 'Motivación',
       readability: 79,
-      keyThemes: ['Pitch', 'Presentación', 'Inversores', 'Storytelling']
-    },
-    performance: {
-      views: 1890,
-      engagement: 98,
-      shares: 15
+      keyThemes: ['Pitch', 'Presentación', 'Inversores', 'Storytelling'],
+      writingStyle: {
+        vocabularyLevel: 'Avanzado',
+        sentenceComplexity: 'Compleja',
+        commonPhrases: ['la clave está en', 'es fundamental', 'no olvides que'],
+        writingPatterns: ['Uso de metáforas', 'Llamadas a la acción']
+      },
+      voiceConsistency: {
+        score: 92,
+        deviations: [],
+        recommendations: ['Excelente consistencia de voz']
+      }
     }
   }
 ];

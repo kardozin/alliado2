@@ -145,10 +145,19 @@ export async function analyzeContent(content: string): Promise<ContentAnalysis> 
     throw new Error('OpenAI no está configurado. Por favor, añade VITE_OPENAI_API_KEY a tu archivo .env');
   }
 
-  const prompt = `Analiza el siguiente contenido y proporciona un análisis detallado en formato JSON.
+  const prompt = `Analiza el siguiente contenido enfocándote en el estilo de escritura, consistencia de voz y calidad editorial. Proporciona un análisis detallado en formato JSON.
 
 CONTENIDO A ANALIZAR:
 ${content}
+
+Analiza estos aspectos específicos:
+1. Tono y emoción dominante
+2. Nivel de legibilidad y complejidad
+3. Temas clave identificados
+4. Calidad SEO básica
+5. Estilo de escritura (vocabulario, estructura de oraciones)
+6. Patrones de escritura únicos
+7. Frases o expresiones características
 
 Proporciona el análisis en este formato JSON exacto:
 {
@@ -158,7 +167,18 @@ Proporciona el análisis en este formato JSON exacto:
   "keyThemes": ["tema1", "tema2", "tema3"],
   "seoScore": número_entre_0_y_100,
   "suggestedKeywords": ["palabra1", "palabra2", "palabra3"],
-  "suggestions": ["sugerencia1", "sugerencia2"]
+  "writingStyle": {
+    "vocabularyLevel": "Básico/Intermedio/Avanzado",
+    "sentenceComplexity": "Simple/Moderada/Compleja",
+    "commonPhrases": ["frase1", "frase2", "frase3"],
+    "writingPatterns": ["patrón1", "patrón2"]
+  },
+  "voiceConsistency": {
+    "score": número_entre_0_y_100,
+    "deviations": ["desviación1", "desviación2"],
+    "recommendations": ["recomendación1", "recomendación2"]
+  },
+  "suggestions": ["sugerencia_editorial1", "sugerencia_editorial2"]
 }
 
 Responde SOLO con el JSON, sin texto adicional:`;
