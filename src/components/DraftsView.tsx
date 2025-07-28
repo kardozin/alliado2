@@ -22,7 +22,7 @@ interface DraftsViewProps {
 
 export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, onRegenerateDraft, onPublish, isAnalyzing = false, isRegenerating = false }: DraftsViewProps) {
   const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
-  const [showAnalysis, setShowAnalysis] = useState(false);
+  const [showAnalysis, setShowAnalysis] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState('');
   const [showNewDraftModal, setShowNewDraftModal] = useState(false);
@@ -198,6 +198,7 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                   setSelectedDraft(draft);
                   setIsEditing(false);
                   setEditContent('');
+                  setShowAnalysis(!!draft.analysis); // Show analysis if it exists
                 }}
               >
                 <div className="flex items-start justify-between mb-3">
@@ -335,7 +336,7 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                     </div>
                   )}
                   
-                  {!selectedDraft.analysis && !showAnalysis && (
+                  {!selectedDraft.analysis && (
                     <div className="mb-6 bg-gray-800/20 border border-gray-700/30 rounded-xl p-4 flex items-center space-x-3">
                       <Zap className="w-5 h-5 text-amber-400" />
                       <div>
