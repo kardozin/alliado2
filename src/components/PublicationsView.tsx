@@ -97,22 +97,6 @@ export function PublicationsView({ publications, activeProject }: PublicationsVi
           <div className="lg:col-span-1 space-y-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-300 serif">Publicaciones</h2>
-              <div className="flex items-center space-x-2">
-                <div className="grid grid-cols-3 gap-6 bg-gray-900/30 rounded-xl p-6 animate-slide-up">
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-gray-100 mb-1">{selectedPublication.analysis.readability || 0}%</p>
-                    <p className="text-sm text-gray-400 font-medium">Legibilidad</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-gray-100 mb-1">{selectedPublication.analysis.seoScore || 0}%</p>
-                    <p className="text-sm text-gray-400 font-medium">SEO Score</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-gray-100 mb-1">{selectedPublication.analysis.voiceConsistency?.score || 0}%</p>
-                    <p className="text-sm text-gray-400 font-medium">Consistencia</p>
-                  </div>
-                </div>
-              </div>
             </div>
             {filteredPublications.map((publication, index) => (
               <div
@@ -230,6 +214,20 @@ export function PublicationsView({ publications, activeProject }: PublicationsVi
 
                 {/* Analysis */}
                 <div className="p-6 border-t nyt-border bg-gray-900/20">
+                  <div className="grid grid-cols-3 gap-6 bg-gray-900/30 rounded-xl p-6 animate-slide-up mb-6">
+                    <div className="text-center">
+                      <p className="text-3xl font-bold text-gray-100 mb-1">{selectedPublication.analysis.readability || 0}%</p>
+                      <p className="text-sm text-gray-400 font-medium">Legibilidad</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-3xl font-bold text-gray-100 mb-1">{selectedPublication.analysis.seoScore || 0}%</p>
+                      <p className="text-sm text-gray-400 font-medium">SEO Score</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-3xl font-bold text-gray-100 mb-1">{selectedPublication.analysis.voiceConsistency?.score || 0}%</p>
+                      <p className="text-sm text-gray-400 font-medium">Consistencia</p>
+                    </div>
+                  </div>
                   <h4 className="font-semibold serif text-gray-100 mb-4 text-lg">Análisis de Contenido</h4>
                   <div className="grid grid-cols-2 gap-6 mb-6">
                     <div>
