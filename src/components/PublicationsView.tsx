@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Send, BarChart, Calendar, ExternalLink, Filter, TrendingUp, Settings, Linkedin, Twitter, Instagram, Facebook, Youtube, Globe } from 'lucide-react';
+import { Send, BarChart, Calendar, ExternalLink, Filter, TrendingUp, Globe } from 'lucide-react';
 import { Publication, Project } from '../types';
 import { RichTextEditor } from './RichTextEditor';
-import { PlatformConnectionModal } from './PlatformConnectionModal';
 import { PlatformAdaptationModal } from './PlatformAdaptationModal';
 
 interface PublicationsViewProps {
@@ -20,9 +19,7 @@ export function PublicationsView({
 }: PublicationsViewProps) {
   const [selectedPublication, setSelectedPublication] = useState<Publication | null>(null);
   const [filterPlatform, setFilterPlatform] = useState<string>('all');
-  const [showConnectionModal, setShowConnectionModal] = useState(false);
   const [showAdaptationModal, setShowAdaptationModal] = useState(false);
-  const [connectedPlatforms, setConnectedPlatforms] = useState<string[]>(['LinkedIn', 'Twitter/X']);
 
   const onSaveAdaptationAsDraft = async (draftData: Omit<Draft, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (onCreateDraft) {
@@ -55,30 +52,6 @@ export function PublicationsView({
 
   const platforms = [...new Set(projectPublications.map(pub => pub.platform))];
 
-  const getPlatformColor = (platform: string) => {
-    const colors: Record<string, string> = {
-      'LinkedIn': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-      'Blog': 'bg-green-500/10 text-green-400 border-green-500/20',
-      'Instagram': 'bg-pink-500/10 text-pink-400 border-pink-500/20',
-      'Twitter': 'bg-sky-500/10 text-sky-400 border-sky-500/20',
-    };
-    return colors[platform] || 'bg-gray-500/10 text-gray-400 border-gray-500/20';
-  };
-
-  const getPlatformIcon = (platform: string) => {
-    const icons: Record<string, any> = {
-      'LinkedIn': Linkedin,
-      'Twitter/X': Twitter,
-      'Instagram': Instagram,
-      'Facebook': Facebook,
-      'YouTube': Youtube,
-    };
-    return icons[platform] || Globe;
-  };
-
-  const handleConnectPlatform = (platform: string, credentials: any) => {
-    setConnectedPlatforms(prev => [...prev, platform]);
-  };
   return (
     <div className="p-8 animate-fade-in">
       <div className="max-w-7xl mx-auto">
@@ -92,13 +65,6 @@ export function PublicationsView({
           
           {/* Filters and Actions */}
           <div className="flex items-center space-x-4 animate-scale-in">
-            <button
-              onClick={() => setShowConnectionModal(true)}
-              className="flex items-center space-x-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all duration-200 font-medium hover-lift"
-            >
-              <Settings className="w-4 h-4" />
-              <span>Conectar Plataformas</span>
-            </button>
             <Filter className="w-4 h-4 text-gray-500" />
             <select
               value={filterPlatform}
@@ -131,16 +97,10 @@ export function PublicationsView({
                 onClick={() => setSelectedPublication(publication)}
               >
                 <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center space-x-2 mb-2">
-                    {(() => {
-                      const Icon = getPlatformIcon(publication.platform);
-                      return <Icon className="w-4 h-4 text-gray-400" />;
-                    })()}
                   <h3 className="font-semibold text-gray-100 text-sm line-clamp-2 leading-tight group-hover:text-white transition-colors duration-300">
                     {publication.title}
                   </h3>
-                  </div>
-                  <span className={`text-xs px-2 py-1 rounded-full font-medium border ${getPlatformColor(publication.platform)}`}>
+                  <span className="status-badge status-captured">
                     {publication.platform}
                   </span>
                 </div>
@@ -190,7 +150,7 @@ export function PublicationsView({
                     <div className="flex-1">
                       <h2 className="text-2xl font-bold serif text-gray-100 mb-3 leading-tight">{selectedPublication.title}</h2>
                       <div className="flex items-center space-x-4 text-sm text-gray-400">
-                        <span className={`px-3 py-1 rounded-full font-medium border ${getPlatformColor(selectedPublication.platform)}`}>
+                        <span className="status-badge status-captured">
                           {selectedPublication.platform}
                         </span>
                         <div className="flex items-center space-x-1">
@@ -266,7 +226,7 @@ export function PublicationsView({
                       {selectedPublication.analysis.keyThemes.map((theme, index) => (
                         <span 
                           key={index} 
-                          className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-xs font-medium border border-blue-500/20 animate-fade-in"
+                          className={`theme-tag theme-tag-${['blue', 'green', 'purple', 'amber', 'red', 'indigo'][index % 6]} animate-fade-in`}
                           style={{ animationDelay: `${index * 50}ms` }}
                         >
                           {theme}
@@ -288,13 +248,6 @@ export function PublicationsView({
           </div>
         </div>
       </div>
-
-      {/* Platform Connection Modal */}
-      <PlatformConnectionModal
-        isOpen={showConnectionModal}
-        onClose={() => setShowConnectionModal(false)}
-        onConnect={handleConnectPlatform}
-      />
 
       {/* Platform Adaptation Modal */}
       {selectedPublication && activeProject && (
