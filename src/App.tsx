@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Settings } from 'lucide-react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AuthForm } from './components/AuthForm';
 import { Sidebar } from './components/Sidebar';
@@ -29,6 +30,9 @@ function AppContent() {
   const { publications, createPublication } = usePublications();
   
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  
+  // Check if Supabase is configured
+  const isSupabaseConfigured = !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
 
   // Set active project when projects load
   React.useEffect(() => {
@@ -50,6 +54,43 @@ function AppContent() {
 
   if (!user) {
     return <AuthForm />;
+  }
+
+  // Show configuration message if Supabase is not configured
+  if (!isSupabaseConfigured) {
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center p-8">
+        <div className="max-w-2xl text-center animate-fade-in">
+          <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Settings className="w-10 h-10 text-amber-400" />
+          </div>
+          <h1 className="text-3xl font-bold serif text-gray-100 mb-4">Configuración Requerida</h1>
+          <p className="text-gray-400 text-lg leading-relaxed mb-8">
+            La aplicación necesita ser configurada con las credenciales de Supabase para funcionar correctamente.
+          </p>
+          <div className="bg-gray-900/50 border border-gray-800/60 rounded-xl p-6 text-left">
+            <h3 className="text-lg font-semibold text-gray-100 mb-4">Variables de Entorno Requeridas:</h3>
+            <div className="space-y-2 font-mono text-sm">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <span className="text-gray-300">VITE_SUPABASE_URL</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <span className="text-gray-300">VITE_SUPABASE_ANON_KEY</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
+                <span className="text-gray-300">VITE_OPENAI_API_KEY (opcional)</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 text-sm text-gray-500">
+            <p>Contacta al administrador para configurar estas variables en Netlify</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const handleProjectSelect = (project: Project) => {
