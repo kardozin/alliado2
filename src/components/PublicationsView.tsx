@@ -274,6 +274,26 @@ export function PublicationsView({ publications, activeProject }: PublicationsVi
         onClose={() => setShowConnectionModal(false)}
         onConnect={handleConnectPlatform}
       />
+
+      {/* Platform Adaptation Modal */}
+      {selectedPublication && activeProject && (
+        <PlatformAdaptationModal
+          isOpen={showAdaptationModal}
+          onClose={() => setShowAdaptationModal(false)}
+          draft={{
+            id: selectedPublication.id,
+            ideaId: '',
+            projectId: selectedPublication.projectId,
+            title: selectedPublication.title,
+            content: selectedPublication.content,
+            version: 1,
+            analysis: selectedPublication.analysis,
+            createdAt: selectedPublication.publishedAt,
+            updatedAt: selectedPublication.publishedAt
+          }}
+          project={activeProject}
+        />
+      )}
     </div>
   );
 }

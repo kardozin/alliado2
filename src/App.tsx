@@ -26,7 +26,7 @@ function AppContent() {
   const { projects, createProject, updateProject, deleteProject } = useProjects();
   const { ideas, createIdea, updateIdea } = useIdeas();
   const { drafts, createDraft, updateDraft, deleteDraft } = useDrafts();
-  const { publications } = usePublications();
+  const { publications, createPublication } = usePublications();
   
   const [activeProject, setActiveProject] = useState<Project | null>(null);
 
