@@ -217,7 +217,7 @@ export function IdeaDetailModal({ idea, project, isOpen, onClose, onGenerateDraf
             <button
               onClick={handleGenerateDraft}
               disabled={isGenerating}
-              className="bg-gray-200 text-black px-8 py-4 rounded-xl hover:bg-gray-100 transition-all duration-200 font-bold hover-lift flex items-center justify-center space-x-3 text-lg"
+              className="btn-primary px-8 py-4 rounded-xl text-lg flex items-center justify-center space-x-3"
             >
               {isGenerating ? (
                 <>

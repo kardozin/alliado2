@@ -215,7 +215,7 @@ export function ProjectSettingsPanel({ isOpen, onClose, project, onUpdateProject
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 animate-fade-in ${
                     isActive 
-                      ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' 
+                      ? 'bg-gray-800/40 text-gray-100 border border-gray-700/50' 
                       : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/40'
                   }`}
                   style={{ animationDelay: `${index * 50}ms` }}
@@ -537,7 +537,7 @@ export function ProjectSettingsPanel({ isOpen, onClose, project, onUpdateProject
           </button>
           <button
             onClick={handleSave}
-            className="btn-primary flex items-center space-x-2"
+            className="bg-amber-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold hover:scale-105 flex items-center space-x-2"
           >
             <Save className="w-4 h-4" />
             <span>Guardar Configuración</span>

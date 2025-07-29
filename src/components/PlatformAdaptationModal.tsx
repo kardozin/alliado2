@@ -357,7 +357,7 @@ export function PlatformAdaptationModal({
                               <button
                                 onClick={handleSaveAsDraft}
                                 disabled={isSaving}
-                                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all duration-200 disabled:opacity-50"
+                                className="btn-secondary disabled:opacity-50 flex items-center space-x-2"
                               >
                                 {isSaving ? (
                                   <Loader className="w-4 h-4 animate-spin" />
@@ -371,7 +371,7 @@ export function PlatformAdaptationModal({
                               <button
                                 onClick={handleSaveAsPublication}
                                 disabled={isSaving}
-                                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-all duration-200 disabled:opacity-50"
+                                className="btn-primary disabled:opacity-50 flex items-center space-x-2"
                               >
                                 {isSaving ? (
                                   <Loader className="w-4 h-4 animate-spin" />

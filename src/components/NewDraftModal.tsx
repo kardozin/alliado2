@@ -116,7 +116,7 @@ export function NewDraftModal({ isOpen, onClose, project, onCreateDraft }: NewDr
               <button
                 onClick={handleSubmit}
                 disabled={loading || !title.trim() || !content.trim()}
-                className="bg-amber-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold hover-lift disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
               >
                 {loading ? (
                   <>
