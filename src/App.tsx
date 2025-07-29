@@ -95,7 +95,10 @@ function AppContent() {
 
   const handleProjectSelect = (project: Project) => {
     setActiveProject(project);
-    setCurrentView('ideas');
+    // Only change to ideas view if we're currently on projects view
+    if (currentView === 'projects') {
+      setCurrentView('ideas');
+    }
   };
 
   const handleNewProject = async (projectData?: any) => {

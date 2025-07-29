@@ -100,7 +100,13 @@ export function IdeasView({
           <Lightbulb className="w-10 h-10 text-gray-500" />
         </div>
         <h3 className="text-2xl font-semibold serif text-gray-200 mb-4">Selecciona un proyecto</h3>
-        <p className="text-gray-400 leading-relaxed">Elige un proyecto para comenzar a capturar y desarrollar ideas</p>
+        <p className="text-gray-400 leading-relaxed mb-6">Elige un proyecto para comenzar a capturar y desarrollar ideas</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-amber-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold"
+        >
+          Recargar Página
+        </button>
       </div>
     );
   }
