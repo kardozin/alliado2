@@ -91,29 +91,26 @@ export async function generateContent(options: GenerateContentOptions): Promise<
     ? `\n\nContexto adicional de la fuente:\n${idea.sourceData}`
     : '';
 
-  const prompt = `Eres un escritor experto especializado en crear contenido estratégico de alta calidad.
+  const prompt = 'Eres un escritor experto especializado en crear contenido estratégico de alta calidad.\n\n' +
+    'CONTEXTO DEL PROYECTO:\n' +
+    '- Tipo de contenido: ' + projectSettings.contentType + '\n' +
+    '- Audiencia objetivo: ' + projectSettings.targetAudience + '\n' +
+    '- Tono deseado: ' + projectSettings.tone + styleGuidesText + '\n\n' +
+    'IDEA A DESARROLLAR:\n' +
+    '- Título: ' + idea.title + '\n' +
+    '- Descripción: ' + idea.description + '\n' +
+    '- Categoría: ' + idea.category + sourceContext + '\n\n' +
+    'INSTRUCCIONES:\n' +
+    '1. Crea un contenido completo y bien estructurado basado en la idea proporcionada\n' +
+    '2. Mantén el tono y estilo consistente con las guías del proyecto\n' +
+    '3. Asegúrate de que el contenido sea relevante para la audiencia objetivo\n' +
+    '4. Incluye una estructura clara con introducción, desarrollo y conclusión\n' +
+    '5. Añade valor práctico y ejemplos cuando sea apropiado\n' +
+    '6. El contenido debe ser original y engaging\n' +
+    '7. NO incluyas bloques de código markdown (```html, ```markdown, etc.)\n' +
+    '8. Responde ÚNICAMENTE con el contenido HTML limpio, sin prefijos ni sufijos\n\n' +
+    'Genera el contenido completo ahora:';
 
-CONTEXTO DEL PROYECTO:
-- Tipo de contenido: ${projectSettings.contentType}
-- Audiencia objetivo: ${projectSettings.targetAudience}
-- Tono deseado: ${projectSettings.tone}${styleGuidesText}
-
-IDEA A DESARROLLAR:
-- Título: ${idea.title}
-- Descripción: ${idea.description}
-- Categoría: ${idea.category}${sourceContext}
-
-INSTRUCCIONES:
-1. Crea un contenido completo y bien estructurado basado en la idea proporcionada
-2. Mantén el tono y estilo consistente con las guías del proyecto
-3. Asegúrate de que el contenido sea relevante para la audiencia objetivo
-4. Incluye una estructura clara con introducción, desarrollo y conclusión
-5. Añade valor práctico y ejemplos cuando sea apropiado
-6. El contenido debe ser original y engaging
-7. NO incluyas bloques de código markdown (```html, ```markdown, etc.)
-8. Responde ÚNICAMENTE con el contenido HTML limpio, sin prefijos ni sufijos
-
-Genera el contenido completo ahora:`;
 
   try {
     const completion = await openai.chat.completions.create({
