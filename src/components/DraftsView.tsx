@@ -6,7 +6,7 @@ import { RichTextEditor } from './RichTextEditor';
 import { NewDraftModal } from './NewDraftModal';
 import { DraftAnalysisPanel } from './DraftAnalysisPanel';
 import { ContentOptimizer } from './ContentOptimizer';
-import { PublishingModal } from './PublishingModal';
+import { PlatformAdaptationModal } from './PlatformAdaptationModal';
 import { PreviewModal } from './PreviewModal';
 
 interface DraftsViewProps {
@@ -15,12 +15,12 @@ interface DraftsViewProps {
   onEditDraft: (draft: Draft) => void;
   onDeleteDraft: (draftId: string) => void;
   onRegenerateDraft: (draftId: string) => void;
-  onPublish?: (publicationData: any) => void;
+  onFinalizeDraft?: (draft: Draft) => void;
   isAnalyzing?: boolean;
   isRegenerating?: boolean;
 }
 
-export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, onRegenerateDraft, onPublish, isAnalyzing = false, isRegenerating = false }: DraftsViewProps) {
+export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, onRegenerateDraft, onFinalizeDraft, isAnalyzing = false, isRegenerating = false }: DraftsViewProps) {
   const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -28,7 +28,7 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
   const [showNewDraftModal, setShowNewDraftModal] = useState(false);
   const [showOptimizer, setShowOptimizer] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
-  const [showPublishingModal, setShowPublishingModal] = useState(false);
+  const [showAdaptationModal, setShowAdaptationModal] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
   const handleCreateManualDraft = async (draftData: Omit<Draft, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -142,9 +142,9 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
     }
   };
 
-  const handlePublish = (publicationData: any) => {
-    if (onPublish) {
-      onPublish(publicationData);
+  const handleFinalizeDraft = () => {
+    if (selectedDraft && onFinalizeDraft) {
+      onFinalizeDraft(selectedDraft);
     }
   };
 
@@ -413,11 +413,11 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                     </button>
                   </div>
                   <button 
-                    onClick={() => setShowPublishingModal(true)}
-                    className="bg-gray-700 text-gray-100 px-6 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200 font-semibold hover-lift flex items-center space-x-2 border border-gray-600"
+                    onClick={() => setShowAdaptationModal(true)}
+                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-500 transition-all duration-200 font-semibold hover-lift flex items-center space-x-2"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>Publicar</span>
+                    <Zap className="w-4 h-4" />
+                    <span>Adaptar para Plataformas</span>
                   </button>
                     </>
                   )}
@@ -446,14 +446,13 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
         />
       )}
 
-      {/* Publishing Modal */}
+      {/* Platform Adaptation Modal */}
       {selectedDraft && activeProject && (
-        <PublishingModal
-          isOpen={showPublishingModal}
-          onClose={() => setShowPublishingModal(false)}
+        <PlatformAdaptationModal
+          isOpen={showAdaptationModal}
+          onClose={() => setShowAdaptationModal(false)}
           draft={selectedDraft}
           project={activeProject}
-          onPublish={handlePublish}
         />
       )}
 

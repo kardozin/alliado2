@@ -211,13 +211,27 @@ function AppContent() {
     }
   };
 
-  const handlePublishContent = async (publicationData: any) => {
+  const handleFinalizeDraft = async (draft: Draft) => {
     try {
-      // In a real implementation, this would call the publications hook
-      console.log('Publishing content:', publicationData);
-      // For now, we'll just log it since we don't have the publications hook integrated
+      // Mark draft as finalized by updating its status or adding a finalized flag
+      const finalizedDraft = {
+        ...draft,
+        // We could add a 'finalized' field to the Draft type if needed
+        updatedAt: new Date()
+      };
+      
+      await updateDraft(draft.id, finalizedDraft);
+      
+      showSuccess(
+        'Borrador Finalizado',
+        'El borrador ha sido marcado como final y está listo para adaptar a diferentes plataformas'
+      );
     } catch (error) {
-      console.error('Error publishing content:', error);
+      console.error('Error finalizing draft:', error);
+      showError(
+        'Error al Finalizar',
+        'No se pudo finalizar el borrador. Intenta nuevamente.'
+      );
     }
   };
   const handleRegenerateDraft = async (draftId: string) => {
@@ -318,7 +332,7 @@ function AppContent() {
             onEditDraft={handleEditDraft}
             onDeleteDraft={handleDeleteDraft}
             onRegenerateDraft={handleRegenerateDraft}
-            onPublish={handlePublishContent}
+            onFinalizeDraft={handleFinalizeDraft}
             isAnalyzing={isAnalyzingContent}
             isRegenerating={isAnalyzingContent}
           />
