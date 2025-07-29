@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Lightbulb, ExternalLink, Rss, Youtube, FileText, Clock, CheckCircle, Trash2, Eye, Send, Loader, Globe, Calendar, ArrowRight } from 'lucide-react';
+import { Plus, Lightbulb, ExternalLink, Rss, Youtube, FileText, Clock, CheckCircle, Trash2, Eye, Send, Loader, Globe, Calendar, ArrowRight, Zap, RefreshCw } from 'lucide-react';
 import { Idea, Project } from '../types';
 import { IdeaDetailModal } from './IdeaDetailModal';
 import { analyzeUrlContent, generateIdeasFromRss } from '../lib/contentAnalysis';
@@ -110,10 +110,12 @@ export function IdeasView({
 
   const handleSelectRssPost = async (post: any) => {
     setSelectedRssPost(post);
+    setRssIdeasSuggestions([]); // Reset suggestions when selecting a new post
+  };
+
+  const handleGenerateRssIdeas = async (post: any) => {
     setIsAnalyzing(true);
-    
     try {
-      // Generate 3 ideas based on the RSS post
       const suggestions = await generateIdeasFromRss(post);
       setRssIdeasSuggestions(suggestions);
     } catch (error) {
