@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export function AuthForm() {
@@ -69,8 +69,8 @@ export function AuthForm() {
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center">
-              <Zap className="w-7 h-7 text-gray-900" />
+            <div className="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center">
+              <span className="text-3xl font-bold serif text-black">A</span>
             </div>
             <h1 className="text-3xl font-bold serif text-gray-100">Allia.do</h1>
           </div>
@@ -95,12 +95,12 @@ export function AuthForm() {
 
           {/* Configuration Warning */}
           {(!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) && (
-            <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg animate-fade-in">
+            <div className="mb-6 p-4 bg-gray-800/30 border border-gray-700/40 rounded-lg animate-fade-in">
               <div className="flex items-center space-x-3">
-                <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                <AlertTriangle className="w-5 h-5 text-gray-300 flex-shrink-0" />
                 <div>
-                  <p className="text-amber-400 text-sm font-medium">Configuración Requerida</p>
-                  <p className="text-amber-300/80 text-xs">
+                  <p className="text-gray-300 text-sm font-medium">Configuración Requerida</p>
+                  <p className="text-gray-400 text-xs">
                     Las variables de entorno de Supabase no están configuradas. 
                     Contacta al administrador para configurar la base de datos.
                   </p>
@@ -110,16 +110,16 @@ export function AuthForm() {
           )}
           {/* Error/Success Messages */}
           {error && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center space-x-3 animate-fade-in">
-              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
-              <p className="text-red-400 text-sm">{error}</p>
+            <div className="mb-6 p-4 bg-gray-800/30 border border-gray-700/40 rounded-lg flex items-center space-x-3 animate-fade-in">
+              <AlertCircle className="w-5 h-5 text-gray-300 flex-shrink-0" />
+              <p className="text-gray-300 text-sm">{error}</p>
             </div>
           )}
 
           {success && (
-            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center space-x-3 animate-fade-in">
-              <AlertCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-              <p className="text-green-400 text-sm">{success}</p>
+            <div className="mb-6 p-4 bg-gray-800/30 border border-gray-700/40 rounded-lg flex items-center space-x-3 animate-fade-in">
+              <AlertCircle className="w-5 h-5 text-gray-300 flex-shrink-0" />
+              <p className="text-gray-300 text-sm">{success}</p>
             </div>
           )}
 
@@ -136,6 +136,7 @@ export function AuthForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-12 pr-4 py-4 bg-gray-900/50 border border-gray-800/60 rounded-xl text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                  className="w-full pl-12 pr-4 py-4 bg-gray-900/50 border border-gray-800/60 rounded-xl text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                   placeholder="tu@email.com"
                   required
                 />
@@ -153,7 +154,7 @@ export function AuthForm() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-4 bg-gray-900/50 border border-gray-800/60 rounded-xl text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                  className="w-full pl-12 pr-12 py-4 bg-gray-900/50 border border-gray-800/60 rounded-xl text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                   placeholder="••••••••"
                   required
                   minLength={6}
@@ -177,11 +178,11 @@ export function AuthForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-gray-900 py-4 rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-200 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed hover-lift"
+              className="w-full bg-gray-200 text-black py-4 rounded-xl hover:bg-gray-100 transition-all duration-200 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed hover-lift"
             >
               {loading ? (
                 <div className="flex items-center justify-center space-x-2">
-                  <div className="w-5 h-5 border-2 border-gray-900/30 border-t-gray-900 rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
                   <span>{isSignUp ? 'Creando cuenta...' : 'Iniciando sesión...'}</span>
                 </div>
               ) : (
@@ -201,7 +202,7 @@ export function AuthForm() {
                 setError(null);
                 setSuccess(null);
               }}
-              className="text-amber-400 hover:text-amber-300 transition-colors duration-200 font-medium mt-2"
+              className="text-gray-300 hover:text-gray-100 transition-colors duration-200 font-medium mt-2"
             >
               {isSignUp ? 'Iniciar Sesión' : 'Crear Cuenta'}
             </button>
@@ -212,7 +213,7 @@ export function AuthForm() {
         <div className="text-center mt-8 animate-fade-in">
           <p className="text-xs text-gray-500">
             Creado por{' '}
-            <span className="text-amber-400 font-medium">Marcelo Cardozo</span>
+            <span className="text-gray-300 font-medium">Marcelo Cardozo</span>
             <br />
             Implementado por IA © 2025
           </p>

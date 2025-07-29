@@ -47,7 +47,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
           </div>
           <button
             onClick={() => setShowNewProjectForm(true)}
-            className="bg-amber-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-amber-400 transition-all duration-200 flex items-center space-x-3 font-semibold hover-lift animate-scale-in"
+            className="bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-all duration-200 flex items-center space-x-3 font-semibold hover-lift animate-scale-in"
           >
             <Plus className="w-5 h-5" />
             <span>Nuevo Proyecto</span>
@@ -67,7 +67,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
                   type="text"
                   value={newProject.name}
                   onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                   placeholder="Ej. Blog de TechStartup"
                 />
               </div>
@@ -79,7 +79,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
                   type="text"
                   value={newProject.contentType}
                   onChange={(e) => setNewProject({ ...newProject, contentType: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                   placeholder="Ej. Artículos para LinkedIn"
                 />
               </div>
@@ -90,7 +90,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
                 <textarea
                   value={newProject.description}
                   onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                   rows={4}
                   placeholder="Describe el propósito y alcance de este proyecto..."
                 />
@@ -103,7 +103,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
                   type="text"
                   value={newProject.targetAudience}
                   onChange={(e) => setNewProject({ ...newProject, targetAudience: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                   placeholder="Ej. Emprendedores tecnológicos"
                 />
               </div>
@@ -115,7 +115,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
                   type="text"
                   value={newProject.tone}
                   onChange={(e) => setNewProject({ ...newProject, tone: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                   placeholder="Ej. Profesional y accesible"
                 />
               </div>
@@ -129,7 +129,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
               </button>
               <button
                 onClick={handleCreateProject}
-                className="bg-amber-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold hover-lift"
+                className="bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold hover-lift"
               >
                 Crear Proyecto
               </button>
@@ -148,7 +148,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
             >
               <div className="flex items-start justify-between mb-6">
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold serif text-gray-100 group-hover:text-amber-400 transition-colors duration-200 mb-2">
+                  <h3 className="text-xl font-semibold serif text-gray-100 group-hover:text-gray-200 transition-colors duration-200 mb-2">
                     {project.name}
                   </h3>
                   <p className="text-gray-400 leading-relaxed line-clamp-3">
@@ -161,7 +161,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
                       e.stopPropagation();
                       onOpenSettings(project);
                     }}
-                    className="p-2 text-gray-400 hover:text-amber-400 transition-colors duration-200 hover:bg-gray-700/50 rounded-lg"
+                    className="p-2 text-gray-400 hover:text-gray-200 transition-colors duration-200 hover:bg-gray-700/50 rounded-lg"
                   >
                     <Settings className="w-4 h-4" />
                   </button>
@@ -185,13 +185,13 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
                 
                 <div className="flex flex-wrap gap-2">
                   {project.settings.contentType && (
-                    <div className="bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-medium border border-amber-500/20">
+                    <div className="bg-gray-800/50 text-gray-300 px-3 py-1 rounded-full text-xs font-medium border border-gray-700/40">
                       {project.settings.contentType}
                     </div>
                   )}
                   
                   {project.settings.targetAudience && (
-                    <div className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-xs font-medium border border-blue-500/20">
+                    <div className="bg-gray-800/50 text-gray-300 px-3 py-1 rounded-full text-xs font-medium border border-gray-700/40">
                       {project.settings.targetAudience}
                     </div>
                   )}
@@ -212,7 +212,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
             </p>
             <button
               onClick={() => setShowNewProjectForm(true)}
-              className="bg-amber-500 text-gray-900 px-8 py-4 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold hover-lift"
+              className="bg-gray-200 text-black px-8 py-4 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold hover-lift"
             >
               Crear Primer Proyecto
             </button>

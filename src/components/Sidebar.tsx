@@ -8,8 +8,7 @@ import {
   Send, 
   BarChart3, 
   Plus,
-  Settings,
-  Zap
+  Settings
 } from 'lucide-react';
 import { ViewMode, Project } from '../types';
 import { useAuth } from '../context/AuthContext';
@@ -58,8 +57,8 @@ export function Sidebar({
       {/* Header */}
       <div className="p-8 border-b nyt-border">
         <div className="flex items-center space-x-3 mb-2">
-          <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
-            <Zap className="w-5 h-5 text-gray-900" />
+          <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
+            <span className="text-lg font-bold serif text-black">A</span>
           </div>
           <h1 className="text-2xl font-bold serif text-gray-100">Allia.do</h1>
         </div>
@@ -100,14 +99,14 @@ export function Sidebar({
                   onClick={() => onViewChange(item.id)}
                   className={`w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all duration-200 group ${
                     isActive 
-                      ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' 
+                      ? 'bg-gray-800/50 text-gray-100 border border-gray-700/50' 
                       : 'text-gray-300 hover:bg-gray-800/30 hover:text-gray-100'
                   }`}
                 >
                   <Icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`} />
                   <span className="font-medium">{item.label}</span>
                   {isActive && (
-                    <div className="ml-auto w-2 h-2 bg-amber-400 rounded-full animate-pulse-subtle"></div>
+                    <div className="ml-auto w-2 h-2 bg-gray-300 rounded-full animate-pulse-subtle"></div>
                   )}
                 </button>
               </li>
@@ -122,7 +121,7 @@ export function Sidebar({
           <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Proyectos</h3>
           <button
             onClick={onNewProject}
-            className="p-2 rounded-lg hover:bg-gray-800/50 transition-all duration-200 text-gray-400 hover:text-amber-400 hover:scale-105"
+            className="p-2 rounded-lg hover:bg-gray-800/50 transition-all duration-200 text-gray-400 hover:text-gray-200 hover:scale-105"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -134,7 +133,7 @@ export function Sidebar({
                 onClick={() => onProjectSelect(project)}
                 className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 group ${
                   activeProject?.id === project.id
-                    ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                    ? 'bg-gray-800/50 text-gray-100 border border-gray-700/50'
                     : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'
                 }`}
               >
@@ -161,7 +160,7 @@ export function Sidebar({
         </button>
         <p className="text-xs text-gray-500 text-center">
           Creado por{' '}
-          <span className="text-amber-400 font-medium">Marcelo Cardozo</span>
+          <span className="text-gray-300 font-medium">Marcelo Cardozo</span>
           <br />
           Implementado por IA © 2025
         </p>

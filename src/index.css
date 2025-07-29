@@ -40,51 +40,51 @@
   }
   
   .glass-effect {
-    @apply bg-gray-900/60 backdrop-blur-sm border border-gray-800/40;
+    @apply bg-gray-900/40 backdrop-blur-sm border border-gray-800/30;
   }
   
   .nyt-border {
-    @apply border-gray-800/50;
+    @apply border-gray-800/40;
   }
   
   .nyt-hover {
-    @apply hover:bg-gray-800/30 transition-all duration-200;
+    @apply hover:bg-gray-800/20 transition-all duration-200;
   }
   
   .text-accent {
-    @apply text-amber-400;
+    @apply text-gray-200;
   }
   
   .bg-accent {
-    @apply bg-amber-500;
+    @apply bg-gray-200;
   }
   
   .border-accent {
-    @apply border-amber-500;
+    @apply border-gray-200;
   }
 
   /* Editorial styling */
   .editorial-card {
-    @apply bg-gray-900/40 border border-gray-800/30 backdrop-blur-sm;
+    @apply bg-gray-900/30 border border-gray-800/20 backdrop-blur-sm;
   }
   
   .editorial-card:hover {
-    @apply bg-gray-800/50 border-gray-700/40;
+    @apply bg-gray-800/40 border-gray-700/30;
   }
   
   .editorial-input {
-    @apply bg-gray-900/50 border border-gray-800/50 text-gray-100 placeholder-gray-500;
-    @apply focus:ring-1 focus:ring-amber-500/50 focus:border-amber-500/50;
+    @apply bg-gray-900/40 border border-gray-800/40 text-gray-100 placeholder-gray-500;
+    @apply focus:ring-1 focus:ring-gray-400/50 focus:border-gray-400/50;
   }
   
   .editorial-button {
-    @apply bg-gray-800/60 text-gray-200 border border-gray-700/50;
-    @apply hover:bg-gray-700/60 hover:text-gray-100 hover:border-gray-600/50;
+    @apply bg-gray-800/50 text-gray-200 border border-gray-700/40;
+    @apply hover:bg-gray-700/50 hover:text-gray-100 hover:border-gray-600/40;
   }
   
   .editorial-button-primary {
-    @apply bg-amber-500 text-black border border-amber-600;
-    @apply hover:bg-amber-400 hover:border-amber-500;
+    @apply bg-gray-200 text-black border border-gray-300;
+    @apply hover:bg-gray-100 hover:border-gray-200;
   }
 }
 
@@ -166,12 +166,12 @@
 
 /* Selection styling */
 ::selection {
-  @apply bg-amber-500/30 text-amber-100;
+  @apply bg-gray-600/30 text-gray-100;
 }
 
 /* Focus styles */
 input:focus, textarea:focus, select:focus {
-  @apply ring-1 ring-amber-500/50 border-amber-500/50 outline-none;
+  @apply ring-1 ring-gray-400/50 border-gray-400/50 outline-none;
 }
 
 /* Typography for editorial content */
@@ -212,5 +212,5 @@ input:focus, textarea:focus, select:focus {
 }
 
 .editorial-content blockquote {
-  @apply border-l-4 border-amber-500/30 pl-4 italic text-gray-300 my-4;
+  @apply border-l-4 border-gray-500/30 pl-4 italic text-gray-300 my-4;
 }
