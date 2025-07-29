@@ -112,7 +112,7 @@ export function DraftAnalysisPanel({ analysis, onReanalyze, isAnalyzing }: Draft
           {analysis.keyThemes.map((theme, index) => (
             <span 
               key={index} 
-              className="bg-blue-500/10 text-blue-400 px-3 py-2 rounded-full text-sm font-medium border border-blue-500/20 animate-fade-in hover:bg-blue-500/20 transition-all duration-200"
+              className={`theme-tag theme-tag-${['blue', 'green', 'purple', 'amber', 'red', 'indigo'][index % 6]} animate-fade-in`}
               style={{ animationDelay: `${index * 50}ms` }}
             >
               {theme}
@@ -129,7 +129,7 @@ export function DraftAnalysisPanel({ analysis, onReanalyze, isAnalyzing }: Draft
             {analysis.suggestedKeywords.map((keyword, index) => (
               <span 
                 key={index} 
-                className="bg-green-500/10 text-green-400 px-3 py-2 rounded-full text-sm font-medium border border-green-500/20 animate-fade-in hover:bg-green-500/20 transition-all duration-200"
+                className={`theme-tag theme-tag-${['green', 'blue', 'purple', 'amber'][index % 4]} animate-fade-in`}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 {keyword}
