@@ -142,26 +142,26 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
           {projects.map((project, index) => (
             <div
               key={project.id}
-              className="glass-effect rounded-xl p-6 hover:bg-gray-800/40 transition-all duration-300 cursor-pointer group hover-lift border nyt-border animate-fade-in"
+              className="card-hover rounded-xl p-6 group animate-fade-in"
               style={{ animationDelay: `${index * 100}ms` }}
               onClick={() => onProjectSelect(project)}
             >
               <div className="flex items-start justify-between mb-6">
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold serif text-gray-100 group-hover:text-gray-200 transition-colors duration-200 mb-2">
+                  <h3 className="text-xl font-semibold serif text-gray-100 group-hover:text-white transition-colors duration-300 mb-2">
                     {project.name}
                   </h3>
                   <p className="text-gray-400 leading-relaxed line-clamp-3">
                     {project.description}
                   </p>
                 </div>
-                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onOpenSettings(project);
                     }}
-                    className="p-2 text-gray-400 hover:text-gray-200 transition-colors duration-200 hover:bg-gray-700/50 rounded-lg"
+                    className="btn-ghost p-2"
                   >
                     <Settings className="w-4 h-4" />
                   </button>
@@ -170,7 +170,7 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
                       e.stopPropagation();
                       onDeleteProject(project.id);
                     }}
-                    className="p-2 text-gray-400 hover:text-red-400 transition-colors duration-200 hover:bg-gray-700/50 rounded-lg"
+                    className="btn-ghost p-2 hover:text-gray-300"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -178,20 +178,20 @@ export function ProjectsView({ projects, onProjectSelect, onNewProject, onDelete
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center text-gray-500 text-sm">
+                <div className="flex items-center text-gray-500 text-sm group-hover:text-gray-400 transition-colors duration-300">
                   <Calendar className="w-4 h-4 mr-3" />
                   <span>Actualizado {project.updatedAt.toLocaleDateString()}</span>
                 </div>
                 
                 <div className="flex flex-wrap gap-2">
                   {project.settings.contentType && (
-                    <div className="bg-gray-800/50 text-gray-300 px-3 py-1 rounded-full text-xs font-medium border border-gray-700/40">
+                    <div className="status-badge status-captured">
                       {project.settings.contentType}
                     </div>
                   )}
                   
                   {project.settings.targetAudience && (
-                    <div className="bg-gray-800/50 text-gray-300 px-3 py-1 rounded-full text-xs font-medium border border-gray-700/40">
+                    <div className="status-badge status-captured">
                       {project.settings.targetAudience}
                     </div>
                   )}

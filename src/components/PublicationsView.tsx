@@ -122,10 +122,10 @@ export function PublicationsView({
             {filteredPublications.map((publication, index) => (
               <div
                 key={publication.id}
-                className={`glass-effect rounded-xl p-5 cursor-pointer transition-all duration-300 border group hover-lift animate-fade-in ${
+                className={`card-hover rounded-xl p-5 group animate-fade-in ${
                   selectedPublication?.id === publication.id
-                    ? 'border-amber-500/30 bg-amber-500/5'
-                    : 'nyt-border hover:bg-gray-800/40'
+                    ? 'border-gray-600/60 bg-gray-800/30'
+                    : ''
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }}
                 onClick={() => setSelectedPublication(publication)}
@@ -136,7 +136,7 @@ export function PublicationsView({
                       const Icon = getPlatformIcon(publication.platform);
                       return <Icon className="w-4 h-4 text-gray-400" />;
                     })()}
-                  <h3 className="font-semibold text-gray-100 text-sm line-clamp-2 leading-tight group-hover:text-amber-400 transition-colors duration-200">
+                  <h3 className="font-semibold text-gray-100 text-sm line-clamp-2 leading-tight group-hover:text-white transition-colors duration-300">
                     {publication.title}
                   </h3>
                   </div>
@@ -160,10 +160,10 @@ export function PublicationsView({
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="bg-gray-800/50 text-gray-300 px-2 py-1 rounded-full text-xs font-medium">
+                    <span className="status-badge status-captured group-hover:bg-gray-700/50 group-hover:text-gray-200 transition-colors duration-300">
                       {publication.analysis.tone}
                     </span>
-                    <span className="bg-purple-500/10 text-purple-400 px-2 py-1 rounded-full text-xs font-medium border border-purple-500/20">
+                    <span className="status-badge status-progress group-hover:bg-gray-600/50 group-hover:text-gray-100 transition-colors duration-300">
                       {publication.analysis.emotion}
                     </span>
                   </div>

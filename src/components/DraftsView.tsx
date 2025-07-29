@@ -188,10 +188,10 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
             {projectDrafts.map((draft, index) => (
               <div
                 key={draft.id}
-                className={`editorial-card rounded-xl p-5 cursor-pointer transition-all duration-300 border group hover-lift animate-fade-in ${
+                className={`card-hover rounded-xl p-5 group animate-fade-in ${
                   selectedDraft?.id === draft.id
-                    ? 'border-amber-500/40 bg-amber-500/10'
-                    : 'nyt-border hover:bg-gray-800/40'
+                    ? 'border-gray-600/60 bg-gray-800/30'
+                    : ''
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }}
                 onClick={() => {
@@ -202,7 +202,7 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                 }}
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-semibold text-gray-100 text-sm line-clamp-2 leading-tight group-hover:text-amber-400 transition-colors duration-200">
+                  <h3 className="font-semibold text-gray-100 text-sm line-clamp-2 leading-tight group-hover:text-white transition-colors duration-300">
                     {draft.title}
                   </h3>
                   <span className="text-xs text-gray-500 bg-gray-800/50 px-2 py-1 rounded-full font-medium">
@@ -210,18 +210,18 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                   </span>
                 </div>
                 
-                <p className="text-gray-400 text-xs mb-4 line-clamp-2 leading-relaxed">
+                <p className="text-gray-400 group-hover:text-gray-300 text-xs mb-4 line-clamp-2 leading-relaxed transition-colors duration-300">
                   {draft.content.replace(/<[^>]*>/g, '').substring(0, 120)}...
                 </p>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 group-hover:text-gray-400 transition-colors duration-300">
                     {draft.updatedAt.toLocaleDateString()}
                   </span>
                   {draft.analysis && (
                     <div className="flex items-center space-x-1">
-                      <BarChart className="w-3 h-3 text-green-400" />
-                      <span className="text-xs text-green-400 font-medium">Analizado</span>
+                      <BarChart className="w-3 h-3 text-gray-300" />
+                      <span className="text-xs text-gray-300 font-medium">Analizado</span>
                     </div>
                   )}
                 </div>

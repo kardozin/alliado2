@@ -67,7 +67,7 @@ export function Sidebar({
 
       {/* Active Project */}
       {activeProject && (
-        <div className="p-6 border-b nyt-border editorial-card mx-4 my-4 rounded-lg animate-slide-up">
+        <div className="p-6 border-b nyt-border card-hover mx-4 my-4 rounded-lg animate-slide-up">
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Proyecto Activo</p>
@@ -79,7 +79,7 @@ export function Sidebar({
               e.stopPropagation();
               setShowSettings(true);
             }}
-            className="p-2 text-gray-400 hover:text-amber-400 transition-all duration-200 hover:bg-gray-800/30 rounded-lg">
+            className="btn-ghost p-2">
               <Settings className="w-4 h-4" />
             </button>
           </div>
@@ -97,16 +97,16 @@ export function Sidebar({
               <li key={item.id} className="animate-fade-in" style={{ animationDelay: `${index * 50}ms` }}>
                 <button
                   onClick={() => onViewChange(item.id)}
-                  className={`w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all duration-200 group ${
+                  className={`w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all duration-300 group ${
                     isActive 
-                      ? 'bg-gray-800/50 text-gray-100 border border-gray-700/50' 
-                      : 'text-gray-300 hover:bg-gray-800/30 hover:text-gray-100'
+                      ? 'bg-gray-800/40 text-white border border-gray-700/50' 
+                      : 'text-gray-300 hover:bg-gray-800/20 hover:text-gray-100'
                   }`}
                 >
-                  <Icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`} />
+                  <Icon className={`w-5 h-5 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`} />
                   <span className="font-medium">{item.label}</span>
                   {isActive && (
-                    <div className="ml-auto w-2 h-2 bg-gray-300 rounded-full animate-pulse-subtle"></div>
+                    <div className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse-subtle"></div>
                   )}
                 </button>
               </li>
@@ -121,7 +121,7 @@ export function Sidebar({
           <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Proyectos</h3>
           <button
             onClick={onNewProject}
-            className="p-2 rounded-lg hover:bg-gray-800/50 transition-all duration-200 text-gray-400 hover:text-gray-200 hover:scale-105"
+            className="btn-ghost p-2 rounded-lg hover:scale-105"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -131,13 +131,13 @@ export function Sidebar({
             <li key={project.id} className="animate-fade-in" style={{ animationDelay: `${index * 30}ms` }}>
               <button
                 onClick={() => onProjectSelect(project)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 group ${
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-300 group ${
                   activeProject?.id === project.id
-                    ? 'bg-gray-800/50 text-gray-100 border border-gray-700/50'
-                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'
+                    ? 'bg-gray-800/40 text-white border border-gray-700/50'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/20'
                 }`}
               >
-                <div className="font-medium group-hover:translate-x-1 transition-transform duration-200">
+                <div className="font-medium group-hover:translate-x-1 transition-transform duration-300">
                   {project.name}
                 </div>
                 <div className="text-xs text-gray-500 mt-0.5 line-clamp-1">
@@ -153,7 +153,7 @@ export function Sidebar({
       <div className="p-4 border-t nyt-border">
         <button
           onClick={handleSignOut}
-          className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-gray-200 hover:bg-gray-800/30 transition-all duration-200 mb-4"
+          className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg btn-ghost mb-4"
         >
           <LogOut className="w-4 h-4" />
           <span className="text-sm font-medium">Cerrar Sesión</span>

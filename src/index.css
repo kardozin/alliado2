@@ -32,23 +32,23 @@
   }
   
   .hover-lift {
-    @apply transition-all duration-200 ease-out;
+    @apply transition-all duration-300 ease-out;
   }
   
   .hover-lift:hover {
-    @apply transform -translate-y-0.5 shadow-xl;
+    @apply transform -translate-y-1 shadow-2xl;
   }
   
   .glass-effect {
-    @apply bg-gray-900/40 backdrop-blur-sm border border-gray-800/30;
+    @apply bg-gray-900/20 backdrop-blur-sm border border-gray-800/20;
   }
   
   .nyt-border {
-    @apply border-gray-800/40;
+    @apply border-gray-800/20;
   }
   
   .nyt-hover {
-    @apply hover:bg-gray-800/20 transition-all duration-200;
+    @apply hover:bg-gray-800/30 transition-all duration-300;
   }
   
   .text-accent {
@@ -65,11 +65,41 @@
 
   /* Editorial styling */
   .editorial-card {
-    @apply bg-gray-900/30 border border-gray-800/20 backdrop-blur-sm;
+    @apply bg-gray-900/10 border border-gray-800/20 backdrop-blur-sm transition-all duration-300;
   }
   
   .editorial-card:hover {
-    @apply bg-gray-800/40 border-gray-700/30;
+    @apply bg-gray-800/20 border-gray-700/30 transform -translate-y-1 shadow-xl;
+  }
+  
+  /* Consistent card hover system */
+  .card-hover {
+    @apply bg-gray-900/10 border border-gray-800/20 backdrop-blur-sm transition-all duration-300 cursor-pointer;
+  }
+  
+  .card-hover:hover {
+    @apply bg-gray-800/20 border-gray-700/30 transform -translate-y-1 shadow-xl;
+  }
+  
+  /* Button system */
+  .btn-primary {
+    @apply bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-all duration-300 font-semibold;
+  }
+  
+  .btn-primary:hover {
+    @apply transform -translate-y-0.5 shadow-lg;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-800/50 text-gray-200 border border-gray-700/40 px-6 py-3 rounded-lg transition-all duration-300 font-medium;
+  }
+  
+  .btn-secondary:hover {
+    @apply bg-gray-700/50 text-gray-100 border-gray-600/40 transform -translate-y-0.5;
+  }
+  
+  .btn-ghost {
+    @apply text-gray-400 hover:text-gray-200 transition-all duration-300 hover:bg-gray-800/30 rounded-lg;
   }
   
   .editorial-input {
@@ -77,14 +107,21 @@
     @apply focus:ring-1 focus:ring-gray-400/50 focus:border-gray-400/50;
   }
   
-  .editorial-button {
-    @apply bg-gray-800/50 text-gray-200 border border-gray-700/40;
-    @apply hover:bg-gray-700/50 hover:text-gray-100 hover:border-gray-600/40;
+  /* Status indicators */
+  .status-badge {
+    @apply px-3 py-1 rounded-full text-xs font-medium border;
   }
   
-  .editorial-button-primary {
-    @apply bg-gray-200 text-black border border-gray-300;
-    @apply hover:bg-gray-100 hover:border-gray-200;
+  .status-captured {
+    @apply bg-gray-800/50 text-gray-300 border-gray-700/40;
+  }
+  
+  .status-progress {
+    @apply bg-gray-700/50 text-gray-200 border-gray-600/40;
+  }
+  
+  .status-completed {
+    @apply bg-gray-600/50 text-gray-100 border-gray-500/40;
   }
 }
 

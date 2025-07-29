@@ -178,7 +178,7 @@ export function AuthForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gray-200 text-black py-4 rounded-xl hover:bg-gray-100 transition-all duration-200 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed hover-lift"
+              className="w-full btn-primary py-4 rounded-xl text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <div className="flex items-center justify-center space-x-2">

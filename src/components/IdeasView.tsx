@@ -598,13 +598,13 @@ export function IdeasView({
               return (
             <div
               key={idea.id}
-              className="glass-effect rounded-xl p-6 hover:bg-gray-800/40 transition-all duration-300 cursor-pointer group hover-lift border nyt-border animate-fade-in relative"
+              className="card-hover rounded-xl p-6 group animate-fade-in relative"
               style={{ animationDelay: `${index * 100}ms` }}
               onClick={() => setSelectedIdea(idea)}
             >
               <div className="flex items-start justify-between mb-4 relative">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-gray-800/50 rounded-lg group-hover:bg-amber-500/10 transition-colors duration-200">
+                  <div className="p-2 bg-gray-800/50 rounded-lg group-hover:bg-gray-700/50 transition-colors duration-300">
                     {getSourceIcon(idea.source)}
                   </div>
                   <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">
@@ -613,47 +613,47 @@ export function IdeasView({
                 </div>
                 <div className="flex items-center space-x-2 relative">
                   {hasDrafts && (
-                    <div className="flex items-center space-x-1 bg-green-500/10 text-green-400 px-2 py-1 rounded-full border border-green-500/20">
+                    <div className="flex items-center space-x-1 bg-gray-700/50 text-gray-300 px-2 py-1 rounded-full border border-gray-600/40">
                       <FileText className="w-3 h-3" />
                       <span className="text-xs font-medium">{ideaDrafts.length}</span>
                     </div>
                   )}
                   {hasPublications && (
-                    <div className="flex items-center space-x-1 bg-blue-500/10 text-blue-400 px-2 py-1 rounded-full border border-blue-500/20">
+                    <div className="flex items-center space-x-1 bg-gray-600/50 text-gray-200 px-2 py-1 rounded-full border border-gray-500/40">
                       <Send className="w-3 h-3" />
                       <span className="text-xs font-medium">{ideaPublications.length}</span>
                     </div>
                   )}
-                  <div className="transition-transform duration-200 group-hover:scale-110">
+                  <div className="transition-transform duration-300 group-hover:scale-110">
                   {getStatusIcon(idea.status)}
                   </div>
                 </div>
               </div>
 
-              <h3 className="text-lg font-semibold serif text-gray-100 group-hover:text-gray-200 transition-colors duration-200 mb-3 leading-tight">
+              <h3 className="text-lg font-semibold serif text-gray-100 group-hover:text-white transition-colors duration-300 mb-3 leading-tight">
                 {idea.title}
               </h3>
               
-              <p className="text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              <p className="text-gray-400 group-hover:text-gray-300 text-sm mb-4 line-clamp-3 leading-relaxed transition-colors duration-300">
                 {idea.description}
               </p>
 
               <div className="flex items-center justify-between relative">
-                <span className="bg-gray-800/50 text-gray-300 px-3 py-1 rounded-full text-xs font-medium">
+                <span className="status-badge status-captured group-hover:bg-gray-700/50 group-hover:text-gray-200 transition-colors duration-300">
                   {idea.category}
                 </span>
                 <div className="flex items-center space-x-2">
                   {/* Action buttons - appear on hover to the left of the date */}
-                  <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                  <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
                     {(hasDrafts || hasPublications) && (
                       <button
                         onClick={(e) => handleViewDrafts(idea.id, e)}
-                        className="p-1.5 bg-gray-800/50 text-gray-300 rounded-md hover:bg-gray-700/50 transition-all duration-200 hover:scale-110 relative"
+                        className="btn-ghost p-1.5 rounded-md relative"
                         title={`Ver ${ideaDrafts.length} borrador(es) y ${ideaPublications.length} publicación(es)`}
                       >
                         <Eye className="w-3.5 h-3.5" />
                         {(hasDrafts || hasPublications) && (
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-gray-300 rounded-full flex items-center justify-center">
+                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-gray-200 rounded-full flex items-center justify-center">
                             <span className="text-xs font-bold text-black">
                               {ideaDrafts.length + ideaPublications.length}
                             </span>
@@ -663,13 +663,13 @@ export function IdeasView({
                     )}
                     <button
                       onClick={(e) => handleDeleteIdea(idea.id, e)}
-                      className="p-1.5 bg-gray-800/50 text-gray-400 rounded-md hover:bg-gray-700/50 transition-all duration-200 hover:scale-110"
+                      className="btn-ghost p-1.5 rounded-md hover:text-gray-300"
                       title="Eliminar idea"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 group-hover:text-gray-400 transition-colors duration-300">
                     {idea.createdAt.toLocaleDateString()}
                   </span>
                 </div>
