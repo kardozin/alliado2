@@ -19,6 +19,12 @@ export function AuthForm() {
     setError(null);
     setSuccess(null);
 
+    // Check if Supabase is configured
+    if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      setError('La aplicación no está configurada correctamente. Las variables de entorno de Supabase no están disponibles. Por favor, contacta al administrador para configurar VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en Netlify.');
+      setLoading(false);
+      return;
+    }
     try {
       if (isSignUp) {
         const { error } = await signUp(email, password);
@@ -87,6 +93,21 @@ export function AuthForm() {
             </p>
           </div>
 
+          {/* Configuration Warning */}
+          {(!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) && (
+            <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg animate-fade-in">
+              <div className="flex items-center space-x-3">
+                <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                <div>
+                  <p className="text-amber-400 text-sm font-medium">Configuración Requerida</p>
+                  <p className="text-amber-300/80 text-xs">
+                    Las variables de entorno de Supabase no están configuradas. 
+                    Contacta al administrador para configurar la base de datos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Error/Success Messages */}
           {error && (
             <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center space-x-3 animate-fade-in">

@@ -3,18 +3,36 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+// In production, show a user-friendly message instead of throwing
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables. Please check your .env file.');
-}
+  console.error('Missing Supabase environment variables. Please configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Netlify.');
+  
+  // Create a mock client that will show helpful error messages
+  export const supabase = {
+    auth: {
+      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+      signInWithPassword: () => Promise.resolve({ error: { message: 'Supabase no está configurado. Contacta al administrador.' } }),
+      signUp: () => Promise.resolve({ error: { message: 'Supabase no está configurado. Contacta al administrador.' } }),
+      signOut: () => Promise.resolve({ error: null })
+    },
+    from: () => ({
+      select: () => ({ order: () => Promise.resolve({ data: [], error: null }) }),
+      insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase no está configurado' } }) }) }),
+      update: () => ({ eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase no está configurado' } }) }) }) }),
+      delete: () => ({ eq: () => Promise.resolve({ error: { message: 'Supabase no está configurado' } }) })
+    })
+  } as any;
+} else {
+  // Validate URL format
+  try {
+    new URL(supabaseUrl);
+  } catch (error) {
+    throw new Error(`Invalid VITE_SUPABASE_URL format: "${supabaseUrl}". Must be a complete URL like https://your-project-id.supabase.co`);
+  }
 
-// Validate URL format
-try {
-  new URL(supabaseUrl);
-} catch (error) {
-  throw new Error(`Invalid VITE_SUPABASE_URL format: "${supabaseUrl}". Must be a complete URL like https://your-project-id.supabase.co`);
+  export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 }
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export type Database = {
   public: {

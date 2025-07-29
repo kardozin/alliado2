@@ -80,7 +80,7 @@ function AppContent() {
       console.error('Error creating project:', error);
       showError(
         'Error al Crear Proyecto',
-        'No se pudo crear el proyecto. Intenta nuevamente.'
+        error instanceof Error ? error.message : 'No se pudo crear el proyecto. Verifica la configuración de la base de datos.'
       );
     }
   };
@@ -98,6 +98,11 @@ function AppContent() {
 
   const handleCreateIdea = async (ideaData: Partial<Idea>) => {
     try {
+      if (!activeProject) {
+        showError('Error', 'No hay proyecto activo seleccionado');
+        return;
+      }
+      
       await createIdea({
         projectId: ideaData.projectId!,
         title: ideaData.title!,
@@ -115,7 +120,7 @@ function AppContent() {
       console.error('Error creating idea:', error);
       showError(
         'Error al Capturar Idea',
-        'No se pudo guardar la idea. Intenta nuevamente.'
+        error instanceof Error ? error.message : 'No se pudo guardar la idea. Verifica la configuración de la base de datos.'
       );
     }
   };
