@@ -3,12 +3,14 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+let supabase: any;
+
 // In production, show a user-friendly message instead of throwing
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Missing Supabase environment variables. Please configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Netlify.');
   
   // Create a mock client that will show helpful error messages
-  export const supabase = {
+  supabase = {
     auth: {
       getSession: () => Promise.resolve({ data: { session: null }, error: null }),
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
@@ -22,7 +24,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
       update: () => ({ eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase no está configurado' } }) }) }) }),
       delete: () => ({ eq: () => Promise.resolve({ error: { message: 'Supabase no está configurado' } }) })
     })
-  } as any;
+  };
 } else {
   // Validate URL format
   try {
@@ -31,8 +33,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(`Invalid VITE_SUPABASE_URL format: "${supabaseUrl}". Must be a complete URL like https://your-project-id.supabase.co`);
   }
 
-  export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
 }
+
+export { supabase };
 
 export type Database = {
   public: {
