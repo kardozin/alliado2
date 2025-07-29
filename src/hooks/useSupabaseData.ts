@@ -316,6 +316,7 @@ export function useDrafts() {
   };
 
   const updateDraft = async (id: string, updates: Partial<Draft>) => {
+    console.log('Updating draft with analysis:', updates.analysis);
     const { data, error } = await supabase
       .from('drafts')
       .update({
@@ -331,6 +332,7 @@ export function useDrafts() {
     if (error) throw error;
 
     const updatedDraft = dbRowToDraft(data);
+    console.log('Draft updated successfully:', updatedDraft);
     setDrafts(prev => prev.map(d => d.id === id ? updatedDraft : d));
     return updatedDraft;
   };

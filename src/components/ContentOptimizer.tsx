@@ -9,15 +9,18 @@ import {
   Lightbulb,
   RefreshCw,
   Copy,
-  Download
+  Download,
+  Loader
 } from 'lucide-react';
 import { ContentAnalysis } from '../types';
+import { generateContent } from '../lib/openai';
 
 interface ContentOptimizerProps {
   content: string;
   analysis: ContentAnalysis;
   onOptimize: (optimizedContent: string) => void;
   onReanalyze: () => void;
+  projectSettings?: any;
   isOptimizing?: boolean;
   isAnalyzing?: boolean;
 }
@@ -27,11 +30,13 @@ export function ContentOptimizer({
   analysis, 
   onOptimize, 
   onReanalyze,
+  projectSettings,
   isOptimizing = false,
   isAnalyzing = false 
 }: ContentOptimizerProps) {
   const [selectedOptimizations, setSelectedOptimizations] = useState<string[]>([]);
   const [showOptimizationPreview, setShowOptimizationPreview] = useState(false);
+  const [isOptimizingContent, setIsOptimizingContent] = useState(false);
 
   const optimizationSuggestions = [
     {
@@ -83,10 +88,44 @@ export function ContentOptimizer({
   const handleOptimize = async () => {
     if (selectedOptimizations.length === 0) return;
     
-    // Aquí se llamaría a la API de OpenAI para optimizar el contenido
-    // Por ahora, simulamos la optimización
-    const optimizedContent = `${content}\n\n[Contenido optimizado basado en: ${selectedOptimizations.join(', ')}]`;
-    onOptimize(optimizedContent);
+    setIsOptimizingContent(true);
+    try {
+      // Crear prompt específico para optimización
+      const optimizationPrompt = `Optimiza el siguiente contenido aplicando estas mejoras específicas: ${selectedOptimizations.map(id => {
+        const suggestion = optimizationSuggestions.find(s => s.id === id);
+        return suggestion ? `${suggestion.title}: ${suggestion.description}` : id;
+      }).join(', ')}.
+
+CONTENIDO ORIGINAL:
+${content}
+
+INSTRUCCIONES:
+- Mantén el mensaje y estructura principal
+- Aplica ÚNICAMENTE las optimizaciones seleccionadas
+- No cambies el tono general del contenido
+- Devuelve el contenido optimizado en formato HTML
+- NO agregues explicaciones adicionales, solo el contenido optimizado`;
+
+      const optimizedContent = await generateContent({
+        idea: {
+          title: 'Optimización de contenido',
+          description: optimizationPrompt,
+          category: 'Optimización'
+        },
+        projectSettings: projectSettings || {
+          styleGuides: [],
+          contentType: '',
+          targetAudience: '',
+          tone: ''
+        }
+      });
+
+      onOptimize(optimizedContent);
+    } catch (error) {
+      console.error('Error optimizing content:', error);
+    } finally {
+      setIsOptimizingContent(false);
+    }
   };
 
   const getImpactColor = (impact: string) => {
@@ -201,12 +240,12 @@ export function ContentOptimizer({
           </button>
           <button
             onClick={handleOptimize}
-            disabled={selectedOptimizations.length === 0 || isOptimizing}
-            className="bg-amber-500 text-gray-900 px-6 py-2 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            disabled={selectedOptimizations.length === 0 || isOptimizingContent}
+            className="bg-amber-500 text-gray-900 px-6 py-2 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 hover-lift"
           >
-            {isOptimizing ? (
+            {isOptimizingContent ? (
               <>
-                <RefreshCw className="w-4 h-4 animate-spin" />
+                <Loader className="w-4 h-4 animate-spin" />
                 <span>Optimizando...</span>
               </>
             ) : (

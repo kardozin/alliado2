@@ -72,6 +72,7 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
   const handleAnalyzeDraft = async () => {
     if (!selectedDraft) return;
 
+    setIsAnalyzing(true);
     try {
       const analysis = await analyzeContent(selectedDraft.content);
       
@@ -86,6 +87,8 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
       setSelectedDraft(updatedDraft);
     } catch (error) {
       console.error('Error analizando contenido:', error);
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -122,7 +125,6 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
   const handleOptimizeContent = async (optimizedContent: string) => {
     if (!selectedDraft) return;
 
-    setIsOptimizing(true);
     try {
       const updatedDraft = {
         ...selectedDraft,
@@ -137,8 +139,6 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
       setShowOptimizer(false);
     } catch (error) {
       console.error('Error optimizing content:', error);
-    } finally {
-      setIsOptimizing(false);
     }
   };
 
@@ -320,7 +320,7 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                         analysis={selectedDraft.analysis}
                         onOptimize={handleOptimizeContent}
                         onReanalyze={handleAnalyzeDraft}
-                        isOptimizing={isOptimizing}
+                        projectSettings={activeProject?.settings}
                         isAnalyzing={isAnalyzing}
                       />
                     </div>
