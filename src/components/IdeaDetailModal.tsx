@@ -81,7 +81,7 @@ export function IdeaDetailModal({ idea, project, isOpen, onClose, onGenerateDraf
                     {getSourceIcon(idea.source)}
                   </div>
                   <div>
-                    <span className={`text-sm font-medium px-3 py-1 rounded-full border ${getSourceColor(idea.source)}`}>
+                    <span className="text-sm font-medium px-3 py-1 rounded-full border bg-gray-800/50 text-gray-300 border-gray-700/40">
                       {getSourceLabel(idea.source)}
                     </span>
                     <p className="text-xs text-gray-500 mt-1">
@@ -177,8 +177,9 @@ export function IdeaDetailModal({ idea, project, isOpen, onClose, onGenerateDraf
 
               {/* AI Generation Preview */}
               <div className="bg-gradient-to-r from-amber-500/5 to-amber-600/5 rounded-xl p-6 border border-amber-500/20">
+              <div className="bg-gray-800/30 rounded-xl p-6 border border-gray-700/40">
                 <div className="flex items-center space-x-3 mb-4">
-                  <Zap className="w-5 h-5 text-amber-400" />
+                  <Zap className="w-5 h-5 text-gray-300" />
                   <h4 className="text-md font-semibold text-gray-100">Generación con IA</h4>
                 </div>
                 <p className="text-gray-300 text-sm leading-relaxed mb-4">
@@ -186,19 +187,19 @@ export function IdeaDetailModal({ idea, project, isOpen, onClose, onGenerateDraf
                 </p>
                 <ul className="space-y-2 text-sm text-gray-400">
                   <li className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
                     <span>Estructura narrativa alineada con tu audiencia objetivo</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
                     <span>Tono y voz consistentes con las guías de estilo del proyecto</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
                     <span>Contenido original y relevante basado en la descripción de la idea</span>
                   </li>
                   <li className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
                     <span>Análisis opcional de tono, emoción y optimización SEO (on-demand)</span>
                   </li>
                 </ul>
@@ -215,7 +216,7 @@ export function IdeaDetailModal({ idea, project, isOpen, onClose, onGenerateDraf
             <button
               onClick={handleGenerateDraft}
               disabled={isGenerating}
-              className="bg-gradient-to-r from-amber-500 to-amber-600 text-gray-900 px-8 py-4 rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-200 font-bold hover-lift flex items-center space-x-3 text-lg"
+              className="bg-gray-200 text-black px-8 py-4 rounded-xl hover:bg-gray-100 transition-all duration-200 font-bold hover-lift flex items-center justify-center space-x-3 text-lg"
             >
               {isGenerating ? (
                 <>

@@ -264,7 +264,7 @@ export function IdeasView({
           </div>
           <button
             onClick={() => setShowNewIdeaForm(true)}
-            className="bg-amber-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-amber-400 transition-all duration-200 flex items-center space-x-3 font-semibold hover-lift animate-scale-in"
+            className="bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-all duration-200 flex items-center space-x-3 font-semibold hover-lift animate-scale-in"
           >
             <Plus className="w-5 h-5" />
             <span>Nueva Idea</span>
@@ -293,7 +293,7 @@ export function IdeasView({
                     onClick={() => setIdeaSource(id as any)}
                     className={`flex items-center space-x-3 px-4 py-3 rounded-lg border transition-all duration-200 ${
                       ideaSource === id
-                        ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                        ? 'bg-gray-800/50 border-gray-700/50 text-gray-100'
                         : 'bg-gray-800/30 border-gray-700/50 text-gray-400 hover:bg-gray-700/30 hover:text-gray-200'
                     }`}
                   >
@@ -314,7 +314,7 @@ export function IdeasView({
                   <textarea
                     value={newIdea.sourceData}
                     onChange={(e) => setNewIdea({ ...newIdea, sourceData: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                     rows={4}
                     placeholder="Pega aquí el texto que quieres analizar..."
                   />
@@ -323,7 +323,7 @@ export function IdeasView({
                     type="url"
                     value={newIdea.sourceData}
                     onChange={(e) => setNewIdea({ ...newIdea, sourceData: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                     placeholder="https://ejemplo.com/articulo"
                   />
                 )}
@@ -331,7 +331,7 @@ export function IdeasView({
                   <button
                     onClick={handleAnalyzeUrl}
                     disabled={isAnalyzing}
-                    className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all duration-200 font-medium disabled:opacity-50 flex items-center space-x-2"
+                    className="mt-3 px-4 py-2 bg-gray-700 text-gray-100 rounded-lg hover:bg-gray-600 transition-all duration-200 font-medium disabled:opacity-50 flex items-center space-x-2"
                   >
                     {isAnalyzing ? (
                       <Loader className="w-4 h-4 animate-spin" />
@@ -352,7 +352,7 @@ export function IdeasView({
                     <h4 className="text-lg font-semibold text-gray-100 mb-4">Selecciona un Post de RSS</h4>
                     {isLoadingRss ? (
                       <div className="text-center py-8">
-                        <Loader className="w-8 h-8 text-amber-400 animate-spin mx-auto mb-4" />
+                        <Loader className="w-8 h-8 text-gray-400 animate-spin mx-auto mb-4" />
                         <p className="text-gray-400">Cargando feeds RSS...</p>
                       </div>
                     ) : rssFeeds.length > 0 ? (
@@ -360,7 +360,7 @@ export function IdeasView({
                         {rssFeeds.map((feed) => (
                           <div key={feed.id} className="bg-gray-900/30 rounded-xl p-6 border border-gray-800/40">
                             <h5 className="font-semibold text-gray-100 mb-4 flex items-center space-x-2">
-                              <Rss className="w-4 h-4 text-green-400" />
+                              <Rss className="w-4 h-4 text-gray-400" />
                               <span>{feed.feedName}</span>
                             </h5>
                             <div className="space-y-3">
@@ -372,7 +372,7 @@ export function IdeasView({
                                 >
                                   <div className="flex items-start justify-between">
                                     <div className="flex-1">
-                                      <h6 className="font-medium text-gray-100 group-hover:text-amber-400 transition-colors duration-200 mb-2">
+                                      <h6 className="font-medium text-gray-100 group-hover:text-gray-200 transition-colors duration-200 mb-2">
                                         {post.title}
                                       </h6>
                                       <p className="text-sm text-gray-400 line-clamp-2 mb-2">
@@ -389,7 +389,7 @@ export function IdeasView({
                                         </div>
                                       </div>
                                     </div>
-                                    <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-amber-400 transition-colors duration-200" />
+                                    <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-gray-300 transition-colors duration-200" />
                                   </div>
                                 </div>
                               ))}
@@ -442,7 +442,7 @@ export function IdeasView({
 
                     {isAnalyzing ? (
                       <div className="text-center py-8">
-                        <Loader className="w-8 h-8 text-amber-400 animate-spin mx-auto mb-4" />
+                        <Loader className="w-8 h-8 text-gray-400 animate-spin mx-auto mb-4" />
                         <p className="text-gray-400">Generando ideas basadas en este post...</p>
                       </div>
                     ) : rssIdeasSuggestions.length > 0 ? (
@@ -452,26 +452,47 @@ export function IdeasView({
                           {rssIdeasSuggestions.map((suggestion, index) => (
                             <div
                               key={index}
-                              className="p-4 bg-gradient-to-r from-amber-500/5 to-amber-600/5 rounded-xl border border-amber-500/20 hover:bg-amber-500/10 transition-all duration-200 cursor-pointer group"
+                              className="p-4 bg-gray-800/30 rounded-xl border border-gray-700/40 hover:bg-gray-700/40 transition-all duration-200 cursor-pointer group"
                               onClick={() => handleCreateRssIdea(suggestion)}
                             >
                               <div className="flex items-start justify-between">
                                 <div className="flex-1">
-                                  <h6 className="font-semibold text-gray-100 group-hover:text-amber-400 transition-colors duration-200 mb-2">
+                                  <h6 className="font-semibold text-gray-100 group-hover:text-gray-200 transition-colors duration-200 mb-2">
                                     {suggestion.title}
                                   </h6>
                                   <p className="text-sm text-gray-300 mb-2">{suggestion.description}</p>
-                                  <span className="text-xs bg-amber-500/10 text-amber-400 px-2 py-1 rounded-full border border-amber-500/20">
+                                  <span className="text-xs bg-gray-800/50 text-gray-300 px-2 py-1 rounded-full border border-gray-700/40">
                                     {suggestion.category}
                                   </span>
                                 </div>
-                                <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-amber-400 transition-colors duration-200" />
+                                <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-gray-300 transition-colors duration-200" />
                               </div>
                             </div>
                           ))}
                         </div>
                       </div>
-                    ) : null}
+                    ) : (
+                      <div className="flex items-center justify-between mb-6">
+                        <h4 className="text-lg font-semibold text-gray-100">Leer Post Completo</h4>
+                        <button
+                          onClick={handleGenerateRssIdeas}
+                          disabled={isAnalyzing}
+                          className="bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                        >
+                          {isAnalyzing ? (
+                            <>
+                              <Loader className="w-4 h-4 animate-spin" />
+                              <span>Generando...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Lightbulb className="w-4 h-4" />
+                              <span>Sugerir Ideas con IA</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -488,7 +509,7 @@ export function IdeasView({
                     type="text"
                     value={newIdea.title}
                     onChange={(e) => setNewIdea({ ...newIdea, title: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                     placeholder={ideaSource === 'direct' ? "Ej. El futuro del trabajo remoto" : "Se generará automáticamente"}
                     disabled={ideaSource === 'url' && isAnalyzing}
                   />
@@ -501,7 +522,7 @@ export function IdeasView({
                     type="text"
                     value={newIdea.category}
                     onChange={(e) => setNewIdea({ ...newIdea, category: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                     placeholder={ideaSource === 'direct' ? "Ej. Tendencias, Tecnología" : "Se generará automáticamente"}
                     disabled={ideaSource === 'url' && isAnalyzing}
                   />
@@ -513,7 +534,7 @@ export function IdeasView({
                   <textarea
                     value={newIdea.description}
                     onChange={(e) => setNewIdea({ ...newIdea, description: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                     rows={4}
                     placeholder={
                       ideaSource === 'direct' ? "Describe la idea y el ángulo que quieres explorar..." :
@@ -528,8 +549,8 @@ export function IdeasView({
 
             {/* URL Analysis Results */}
             {ideaSource === 'url' && urlSuggestions && (
-              <div className="mb-6 p-4 bg-green-500/5 border border-green-500/20 rounded-xl">
-                <h4 className="font-semibold text-green-400 mb-3 flex items-center space-x-2">
+              <div className="mb-6 p-4 bg-gray-800/30 border border-gray-700/40 rounded-xl">
+                <h4 className="font-semibold text-gray-300 mb-3 flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4" />
                   <span>Análisis Completado</span>
                 </h4>
@@ -556,7 +577,7 @@ export function IdeasView({
                 <button
                   onClick={handleCreateIdea}
                   disabled={!isFormValid() || isAnalyzing}
-                  className="bg-amber-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold hover-lift disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-amber-500 flex items-center space-x-2"
+                  className="bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold hover-lift disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                 >
                   {isAnalyzing && <Loader className="w-4 h-4 animate-spin" />}
                   <span>Capturar Idea</span>
@@ -609,7 +630,7 @@ export function IdeasView({
                 </div>
               </div>
 
-              <h3 className="text-lg font-semibold serif text-gray-100 group-hover:text-amber-400 transition-colors duration-200 mb-3 leading-tight">
+              <h3 className="text-lg font-semibold serif text-gray-100 group-hover:text-gray-200 transition-colors duration-200 mb-3 leading-tight">
                 {idea.title}
               </h3>
               
@@ -627,13 +648,13 @@ export function IdeasView({
                     {(hasDrafts || hasPublications) && (
                       <button
                         onClick={(e) => handleViewDrafts(idea.id, e)}
-                        className="p-1.5 bg-blue-500/10 text-blue-400 rounded-md hover:bg-blue-500/20 transition-all duration-200 hover:scale-110 relative"
+                        className="p-1.5 bg-gray-800/50 text-gray-300 rounded-md hover:bg-gray-700/50 transition-all duration-200 hover:scale-110 relative"
                         title={`Ver ${ideaDrafts.length} borrador(es) y ${ideaPublications.length} publicación(es)`}
                       >
                         <Eye className="w-3.5 h-3.5" />
                         {(hasDrafts || hasPublications) && (
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-amber-500 rounded-full flex items-center justify-center">
-                            <span className="text-xs font-bold text-gray-900">
+                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-gray-300 rounded-full flex items-center justify-center">
+                            <span className="text-xs font-bold text-black">
                               {ideaDrafts.length + ideaPublications.length}
                             </span>
                           </div>
@@ -642,7 +663,7 @@ export function IdeasView({
                     )}
                     <button
                       onClick={(e) => handleDeleteIdea(idea.id, e)}
-                      className="p-1.5 bg-red-500/10 text-red-400 rounded-md hover:bg-red-500/20 transition-all duration-200 hover:scale-110"
+                      className="p-1.5 bg-gray-800/50 text-gray-400 rounded-md hover:bg-gray-700/50 transition-all duration-200 hover:scale-110"
                       title="Eliminar idea"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -669,7 +690,7 @@ export function IdeasView({
             </p>
             <button
               onClick={() => setShowNewIdeaForm(true)}
-              className="bg-amber-500 text-gray-900 px-8 py-4 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold hover-lift"
+              className="bg-gray-200 text-black px-8 py-4 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold hover-lift"
             >
               Capturar Primera Idea
             </button>
