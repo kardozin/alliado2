@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Plus, Lightbulb, ExternalLink, Rss, Youtube, FileText, Clock, CheckCircle, Trash2, Eye, Send } from 'lucide-react';
+import { Plus, Lightbulb, ExternalLink, Rss, Youtube, FileText, Clock, CheckCircle, Trash2, Eye, Send, Loader, Globe, Calendar, ArrowRight } from 'lucide-react';
 import { Idea, Project } from '../types';
 import { IdeaDetailModal } from './IdeaDetailModal';
+import { analyzeUrlContent, generateIdeasFromRss } from '../lib/contentAnalysis';
 
 interface IdeasViewProps {
   ideas: Idea[];
@@ -27,12 +28,142 @@ export function IdeasView({
   const [showNewIdeaForm, setShowNewIdeaForm] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
   const [ideaSource, setIdeaSource] = useState<'direct' | 'text' | 'url' | 'rss'>('direct');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [urlSuggestions, setUrlSuggestions] = useState<{title: string, description: string, category: string} | null>(null);
+  const [rssFeeds, setRssFeeds] = useState<any[]>([]);
+  const [selectedRssPost, setSelectedRssPost] = useState<any>(null);
+  const [rssIdeasSuggestions, setRssIdeasSuggestions] = useState<any[]>([]);
+  const [isLoadingRss, setIsLoadingRss] = useState(false);
   const [newIdea, setNewIdea] = useState({
     title: '',
     description: '',
     category: '',
     sourceData: ''
   });
+
+  // Load RSS feeds when RSS source is selected
+  React.useEffect(() => {
+    if (ideaSource === 'rss' && activeProject?.settings.rssFeeds?.length > 0) {
+      loadRssFeeds();
+    }
+  }, [ideaSource, activeProject]);
+
+  const loadRssFeeds = async () => {
+    if (!activeProject?.settings.rssFeeds?.length) return;
+    
+    setIsLoadingRss(true);
+    try {
+      // Simulate RSS feed loading - in a real app, you'd fetch from RSS feeds
+      // For now, we'll create mock data based on the configured feeds
+      const mockRssData = activeProject.settings.rssFeeds.map((feedUrl, index) => ({
+        id: `feed-${index}`,
+        feedUrl,
+        feedName: feedUrl.includes('techcrunch') ? 'TechCrunch' : 
+                  feedUrl.includes('producthunt') ? 'Product Hunt' :
+                  feedUrl.includes('behance') ? 'Behance' : 'RSS Feed',
+        posts: [
+          {
+            id: `post-${index}-1`,
+            title: `Artículo de ejemplo ${index + 1}`,
+            description: `Descripción del artículo de ejemplo que viene del feed RSS. Este contenido sería extraído del feed real.`,
+            publishedAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
+            url: `${feedUrl}/article-${index + 1}`
+          },
+          {
+            id: `post-${index}-2`,
+            title: `Otro artículo interesante ${index + 1}`,
+            description: `Otra descripción de ejemplo que vendría del feed RSS configurado en el proyecto.`,
+            publishedAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
+            url: `${feedUrl}/article-${index + 2}`
+          }
+        ]
+      }));
+      
+      setRssFeeds(mockRssData);
+    } catch (error) {
+      console.error('Error loading RSS feeds:', error);
+    } finally {
+      setIsLoadingRss(false);
+    }
+  };
+
+  const handleAnalyzeUrl = async () => {
+    if (!newIdea.sourceData.trim()) return;
+    
+    setIsAnalyzing(true);
+    try {
+      // Simulate URL analysis - in a real app, you'd extract content from the URL
+      const suggestions = await analyzeUrlContent(newIdea.sourceData);
+      setUrlSuggestions(suggestions);
+      setNewIdea({
+        ...newIdea,
+        title: suggestions.title,
+        description: suggestions.description,
+        category: suggestions.category
+      });
+    } catch (error) {
+      console.error('Error analyzing URL:', error);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const handleSelectRssPost = async (post: any) => {
+    setSelectedRssPost(post);
+    setIsAnalyzing(true);
+    
+    try {
+      // Generate 3 ideas based on the RSS post
+      const suggestions = await generateIdeasFromRss(post);
+      setRssIdeasSuggestions(suggestions);
+    } catch (error) {
+      console.error('Error generating ideas from RSS:', error);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const handleCreateRssIdea = (suggestion: any) => {
+    if (activeProject && selectedRssPost) {
+      onCreateIdea({
+        title: suggestion.title,
+        description: suggestion.description,
+        category: suggestion.category,
+        projectId: activeProject.id,
+        source: 'rss',
+        status: 'captured',
+        sourceData: `RSS: ${selectedRssPost.title}\n\nURL: ${selectedRssPost.url}\n\nContenido original: ${selectedRssPost.description}`
+      });
+      
+      // Reset RSS state
+      setSelectedRssPost(null);
+      setRssIdeasSuggestions([]);
+      setShowNewIdeaForm(false);
+    }
+  };
+
+  const resetForm = () => {
+    setNewIdea({ title: '', description: '', category: '', sourceData: '' });
+    setUrlSuggestions(null);
+    setSelectedRssPost(null);
+    setRssIdeasSuggestions([]);
+    setIdeaSource('direct');
+  };
+
+  const isFormValid = () => {
+    switch (ideaSource) {
+      case 'direct':
+        return newIdea.description.trim().length > 0;
+      case 'text':
+        return newIdea.sourceData.trim().length > 0;
+      case 'url':
+        return newIdea.sourceData.trim().length > 0 && newIdea.sourceData.startsWith('http');
+      case 'rss':
+        return selectedRssPost !== null;
+      default:
+        return false;
+    }
+  };
 
   // Get drafts for a specific idea
   const getDraftsForIdea = (ideaId: string) => {
@@ -62,16 +193,22 @@ export function IdeasView({
     console.log('View drafts for idea:', ideaId);
   };
   const handleCreateIdea = () => {
-    if (newIdea.title.trim() && activeProject) {
-      onCreateIdea({
-        ...newIdea,
+    if (isFormValid() && activeProject) {
+      const ideaData = {
         projectId: activeProject.id,
         source: ideaSource,
-        status: 'captured',
+        status: 'captured' as const,
+        title: newIdea.title.trim() || 'Idea sin título',
+        description: newIdea.description.trim() || 'Descripción generada automáticamente',
+        category: newIdea.category.trim() || 'General',
         sourceData: newIdea.sourceData || undefined
+      };
+      
+      onCreateIdea({
+        ...ideaData
       });
       setShowNewIdeaForm(false);
-      setNewIdea({ title: '', description: '', category: '', sourceData: '' });
+      resetForm();
     }
   };
 
@@ -134,7 +271,7 @@ export function IdeasView({
 
         {/* New Idea Form */}
         {showNewIdeaForm && (
-          <div className="glass-effect rounded-xl p-8 mb-8 animate-slide-up border nyt-border">
+          <div className="glass-effect rounded-xl p-8 mb-8 animate-slide-up border nyt-border max-w-4xl mx-auto">
             <h3 className="text-xl font-semibold serif text-gray-100 mb-6">Capturar Nueva Idea</h3>
             
             {/* Source Selection */}
@@ -165,7 +302,7 @@ export function IdeasView({
               </div>
             </div>
 
-            {/* Source Data Input */}
+            {/* Dynamic Content Based on Source */}
             {(ideaSource === 'text' || ideaSource === 'url') && (
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-300 mb-3">
@@ -188,63 +325,242 @@ export function IdeasView({
                     placeholder="https://ejemplo.com/articulo"
                   />
                 )}
+                {ideaSource === 'url' && newIdea.sourceData.trim() && (
+                  <button
+                    onClick={handleAnalyzeUrl}
+                    disabled={isAnalyzing}
+                    className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all duration-200 font-medium disabled:opacity-50 flex items-center space-x-2"
+                  >
+                    {isAnalyzing ? (
+                      <Loader className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Globe className="w-4 h-4" />
+                    )}
+                    <span>{isAnalyzing ? 'Analizando...' : 'Analizar URL'}</span>
+                  </button>
+                )}
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-3">
-                  Título de la Idea
-                </label>
-                <input
-                  type="text"
-                  value={newIdea.title}
-                  onChange={(e) => setNewIdea({ ...newIdea, title: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
-                  placeholder="Ej. El futuro del trabajo remoto"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-3">
-                  Categoría
-                </label>
-                <input
-                  type="text"
-                  value={newIdea.category}
-                  onChange={(e) => setNewIdea({ ...newIdea, category: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
-                  placeholder="Ej. Tendencias, Tecnología, Análisis"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-300 mb-3">
-                  Descripción
-                </label>
-                <textarea
-                  value={newIdea.description}
-                  onChange={(e) => setNewIdea({ ...newIdea, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
-                  rows={4}
-                  placeholder="Describe la idea y el ángulo que quieres explorar..."
-                />
-              </div>
-            </div>
+            {/* RSS Feed Selection */}
+            {ideaSource === 'rss' && (
+              <div className="mb-6">
+                {!selectedRssPost ? (
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-100 mb-4">Selecciona un Post de RSS</h4>
+                    {isLoadingRss ? (
+                      <div className="text-center py-8">
+                        <Loader className="w-8 h-8 text-amber-400 animate-spin mx-auto mb-4" />
+                        <p className="text-gray-400">Cargando feeds RSS...</p>
+                      </div>
+                    ) : rssFeeds.length > 0 ? (
+                      <div className="space-y-6">
+                        {rssFeeds.map((feed) => (
+                          <div key={feed.id} className="bg-gray-900/30 rounded-xl p-6 border border-gray-800/40">
+                            <h5 className="font-semibold text-gray-100 mb-4 flex items-center space-x-2">
+                              <Rss className="w-4 h-4 text-green-400" />
+                              <span>{feed.feedName}</span>
+                            </h5>
+                            <div className="space-y-3">
+                              {feed.posts.map((post: any) => (
+                                <div
+                                  key={post.id}
+                                  className="p-4 bg-gray-800/30 rounded-lg hover:bg-gray-700/40 transition-all duration-200 cursor-pointer group"
+                                  onClick={() => handleSelectRssPost(post)}
+                                >
+                                  <div className="flex items-start justify-between">
+                                    <div className="flex-1">
+                                      <h6 className="font-medium text-gray-100 group-hover:text-amber-400 transition-colors duration-200 mb-2">
+                                        {post.title}
+                                      </h6>
+                                      <p className="text-sm text-gray-400 line-clamp-2 mb-2">
+                                        {post.description}
+                                      </p>
+                                      <div className="flex items-center space-x-3 text-xs text-gray-500">
+                                        <div className="flex items-center space-x-1">
+                                          <Calendar className="w-3 h-3" />
+                                          <span>{post.publishedAt.toLocaleDateString()}</span>
+                                        </div>
+                                        <div className="flex items-center space-x-1">
+                                          <ExternalLink className="w-3 h-3" />
+                                          <span>Ver original</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-amber-400 transition-colors duration-200" />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 bg-gray-900/20 rounded-xl border border-gray-800/40">
+                        <Rss className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+                        <p className="text-gray-400 mb-2">No hay feeds RSS configurados</p>
+                        <p className="text-gray-500 text-sm">Configura feeds RSS en la configuración del proyecto</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-lg font-semibold text-gray-100">Post Seleccionado</h4>
+                      <button
+                        onClick={() => {
+                          setSelectedRssPost(null);
+                          setRssIdeasSuggestions([]);
+                        }}
+                        className="text-gray-400 hover:text-gray-200 transition-colors duration-200"
+                      >
+                        ← Cambiar post
+                      </button>
+                    </div>
+                    
+                    <div className="bg-gray-900/30 rounded-xl p-6 border border-gray-800/40 mb-6">
+                      <h5 className="font-semibold text-gray-100 mb-2">{selectedRssPost.title}</h5>
+                      <p className="text-gray-300 text-sm mb-4">{selectedRssPost.description}</p>
+                      <div className="flex items-center space-x-4 text-xs text-gray-500">
+                        <div className="flex items-center space-x-1">
+                          <Calendar className="w-3 h-3" />
+                          <span>{selectedRssPost.publishedAt.toLocaleDateString()}</span>
+                        </div>
+                        <a 
+                          href={selectedRssPost.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors duration-200"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          <span>Ver artículo original</span>
+                        </a>
+                      </div>
+                    </div>
 
-            <div className="flex justify-end space-x-4 mt-8">
-              <button
-                onClick={() => setShowNewIdeaForm(false)}
-                className="px-6 py-3 text-gray-400 hover:text-gray-200 transition-colors duration-200"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleCreateIdea}
-                disabled={!newIdea.title.trim()}
-                className="bg-amber-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold hover-lift disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-amber-500"
-              >
-                Capturar Idea
-              </button>
-            </div>
+                    {isAnalyzing ? (
+                      <div className="text-center py-8">
+                        <Loader className="w-8 h-8 text-amber-400 animate-spin mx-auto mb-4" />
+                        <p className="text-gray-400">Generando ideas basadas en este post...</p>
+                      </div>
+                    ) : rssIdeasSuggestions.length > 0 ? (
+                      <div>
+                        <h4 className="text-lg font-semibold text-gray-100 mb-4">Ideas Sugeridas por IA</h4>
+                        <div className="space-y-4">
+                          {rssIdeasSuggestions.map((suggestion, index) => (
+                            <div
+                              key={index}
+                              className="p-4 bg-gradient-to-r from-amber-500/5 to-amber-600/5 rounded-xl border border-amber-500/20 hover:bg-amber-500/10 transition-all duration-200 cursor-pointer group"
+                              onClick={() => handleCreateRssIdea(suggestion)}
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <h6 className="font-semibold text-gray-100 group-hover:text-amber-400 transition-colors duration-200 mb-2">
+                                    {suggestion.title}
+                                  </h6>
+                                  <p className="text-sm text-gray-300 mb-2">{suggestion.description}</p>
+                                  <span className="text-xs bg-amber-500/10 text-amber-400 px-2 py-1 rounded-full border border-amber-500/20">
+                                    {suggestion.category}
+                                  </span>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-amber-400 transition-colors duration-200" />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Form Fields - Only show for direct, text, and url (after analysis) */}
+            {(ideaSource !== 'rss') && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-3">
+                    Título de la Idea {ideaSource === 'direct' ? '(opcional)' : ''}
+                  </label>
+                  <input
+                    type="text"
+                    value={newIdea.title}
+                    onChange={(e) => setNewIdea({ ...newIdea, title: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                    placeholder={ideaSource === 'direct' ? "Ej. El futuro del trabajo remoto" : "Se generará automáticamente"}
+                    disabled={ideaSource === 'url' && isAnalyzing}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-3">
+                    Categoría {ideaSource === 'direct' ? '(opcional)' : ''}
+                  </label>
+                  <input
+                    type="text"
+                    value={newIdea.category}
+                    onChange={(e) => setNewIdea({ ...newIdea, category: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                    placeholder={ideaSource === 'direct' ? "Ej. Tendencias, Tecnología" : "Se generará automáticamente"}
+                    disabled={ideaSource === 'url' && isAnalyzing}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-3">
+                    Descripción {ideaSource === 'direct' ? '(obligatorio)' : ideaSource === 'text' ? '(opcional)' : ''}
+                  </label>
+                  <textarea
+                    value={newIdea.description}
+                    onChange={(e) => setNewIdea({ ...newIdea, description: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-900/50 border nyt-border rounded-lg text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
+                    rows={4}
+                    placeholder={
+                      ideaSource === 'direct' ? "Describe la idea y el ángulo que quieres explorar..." :
+                      ideaSource === 'text' ? "Descripción adicional (opcional)" :
+                      "Se generará automáticamente desde la URL"
+                    }
+                    disabled={ideaSource === 'url' && isAnalyzing}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* URL Analysis Results */}
+            {ideaSource === 'url' && urlSuggestions && (
+              <div className="mb-6 p-4 bg-green-500/5 border border-green-500/20 rounded-xl">
+                <h4 className="font-semibold text-green-400 mb-3 flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Análisis Completado</span>
+                </h4>
+                <div className="text-sm text-gray-300 space-y-2">
+                  <p><strong>Título sugerido:</strong> {urlSuggestions.title}</p>
+                  <p><strong>Categoría sugerida:</strong> {urlSuggestions.category}</p>
+                  <p><strong>Descripción:</strong> {urlSuggestions.description}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            {ideaSource !== 'rss' && (
+              <div className="flex justify-end space-x-4 mt-8">
+                <button
+                  onClick={() => {
+                    setShowNewIdeaForm(false);
+                    resetForm();
+                  }}
+                  className="px-6 py-3 text-gray-400 hover:text-gray-200 transition-colors duration-200"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleCreateIdea}
+                  disabled={!isFormValid() || isAnalyzing}
+                  className="bg-amber-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-amber-400 transition-all duration-200 font-semibold hover-lift disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-amber-500 flex items-center space-x-2"
+                >
+                  {isAnalyzing && <Loader className="w-4 h-4 animate-spin" />}
+                  <span>Capturar Idea</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
 
