@@ -17,7 +17,17 @@ const dbRowToProject = (row: any): Project => ({
     tone: '',
     referenceDocuments: [],
     rssFeeds: []
-  }
+  },
+  // Ensure referenceDocuments have proper Date objects for uploadedAt
+  ...(row.settings?.referenceDocuments && {
+    settings: {
+      ...row.settings,
+      referenceDocuments: row.settings.referenceDocuments.map((doc: any) => ({
+        ...doc,
+        uploadedAt: new Date(doc.uploadedAt)
+      }))
+    }
+  })
 });
 
 // Helper function to convert database row to Idea type
