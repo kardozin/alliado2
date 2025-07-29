@@ -412,13 +412,22 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                       <span className="text-sm font-medium">Vista Previa</span>
                     </button>
                   </div>
-                  <button 
-                    onClick={() => setShowAdaptationModal(true)}
-                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-500 transition-all duration-200 font-semibold hover-lift flex items-center space-x-2"
-                  >
-                    <Zap className="w-4 h-4" />
-                    <span>Adaptar para Plataformas</span>
-                  </button>
+                  <div className="flex space-x-3">
+                    <button 
+                      onClick={() => setShowAdaptationModal(true)}
+                      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500 transition-all duration-200 font-semibold hover-lift flex items-center space-x-2"
+                    >
+                      <Zap className="w-4 h-4" />
+                      <span>Adaptar para Plataformas</span>
+                    </button>
+                    <button 
+                      onClick={handleFinalizeDraft}
+                      className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-500 transition-all duration-200 font-semibold hover-lift flex items-center space-x-2"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Guardar como Final</span>
+                    </button>
+                  </div>
                     </>
                   )}
                 </div>
