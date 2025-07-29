@@ -414,7 +414,7 @@ export function AnalyticsView({ publications, activeProject }: AnalyticsViewProp
                         <div className="flex items-center space-x-3">
                           <div className="w-24 bg-gray-800 rounded-full h-2">
                             <div 
-                              className="bg-amber-500 h-2 rounded-full transition-all duration-1000"
+                              className="bg-gray-400 h-2 rounded-full transition-all duration-1000"
                               style={{ width: `${percentage}%` }}
                             ></div>
                           </div>
