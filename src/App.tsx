@@ -24,7 +24,7 @@ function AppContent() {
   const { user, loading } = useAuth();
   const { messages, removeToast, showSuccess, showError, showLoading, updateToast } = useToast();
   const { projects, createProject, updateProject, deleteProject } = useProjects();
-  const { ideas, createIdea, updateIdea } = useIdeas();
+  const { ideas, createIdea, updateIdea, deleteIdea } = useIdeas();
   const { drafts, createDraft, updateDraft, deleteDraft } = useDrafts();
   const { publications, createPublication } = usePublications();
   
@@ -135,6 +135,7 @@ function AppContent() {
       );
     }
   };
+  
   const handleGenerateDraft = async (idea: Idea) => {
     if (!activeProject) return;
 
@@ -213,27 +214,43 @@ function AppContent() {
 
   const handleFinalizeDraft = async (draft: Draft) => {
     try {
-      // Mark draft as finalized by updating its status or adding a finalized flag
-      const finalizedDraft = {
-        ...draft,
-        // We could add a 'finalized' field to the Draft type if needed
-        updatedAt: new Date()
-      };
+      // Create a publication from the draft
+      await createPublication({
+        projectId: draft.projectId,
+        title: draft.title,
+        content: draft.content,
+        platform: 'Final',
+        publishedAt: new Date(),
+        analysis: draft.analysis || {
+          tone: 'Profesional',
+          emotion: 'Neutral',
+          readability: 75,
+          keyThemes: ['Contenido'],
+          seoScore: 70
+        }
+      });
       
-      await updateDraft(draft.id, finalizedDraft);
+      // Update the idea status to completed if it has an ideaId
+      if (draft.ideaId) {
+        await updateIdea(draft.ideaId, { status: 'completed' });
+      }
       
       showSuccess(
-        'Borrador Finalizado',
-        'El borrador ha sido marcado como final y está listo para adaptar a diferentes plataformas'
+        'Publicación Final Creada',
+        'El borrador ha sido guardado como publicación final y está disponible en el archivo editorial'
       );
+      
+      // Switch to publications view to show the new publication
+      setCurrentView('publications');
     } catch (error) {
-      console.error('Error finalizing draft:', error);
+      console.error('Error creating final publication:', error);
       showError(
-        'Error al Finalizar',
-        'No se pudo finalizar el borrador. Intenta nuevamente.'
+        'Error al Crear Publicación',
+        'No se pudo crear la publicación final. Intenta nuevamente.'
       );
     }
   };
+  
   const handleRegenerateDraft = async (draftId: string) => {
     const draft = drafts.find(d => d.id === draftId);
     if (draft && activeProject) {
@@ -352,7 +369,7 @@ function AppContent() {
           />
         );
       default:
-        return <ProjectsView projects={projects} onProjectSelect={handleProjectSelect} onNewProject={handleNewProject} onDeleteProject={handleDeleteProject} />;
+        return <ProjectsView projects={projects} onProjectSelect={handleProjectSelect} onNewProject={handleNewProject} onDeleteProject={handleDeleteProject} onOpenSettings={handleOpenProjectSettings} />;
     }
   };
 
@@ -387,8 +404,7 @@ function AppContent() {
             handleUpdateProject(updatedProject);
             setShowProjectSettings(false);
             setSettingsProject(null);
-          }
-          }
+          }}
           onGenerateDraft={handleGenerateDraft}
         />
       )}
