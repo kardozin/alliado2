@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BarChart3, TrendingUp, Calendar, Filter, PieChart, Activity, Target, Zap, Brain, Eye } from 'lucide-react';
+import { BarChart3, TrendingUp, Calendar, Filter, PieChart, Activity, Target, Zap, Brain, Eye, FileText } from 'lucide-react';
 import { Publication, Project } from '../types';
 
 interface AnalyticsViewProps {
