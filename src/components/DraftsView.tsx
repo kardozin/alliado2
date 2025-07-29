@@ -211,7 +211,7 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                 </div>
                 
                 <p className="text-gray-400 text-xs mb-4 line-clamp-2 leading-relaxed">
-                  {draft.content.substring(0, 120)}...
+                  {draft.content.replace(/<[^>]*>/g, '').substring(0, 120)}...
                 </p>
 
                 <div className="flex items-center justify-between">

@@ -110,6 +110,8 @@ INSTRUCCIONES:
 4. Incluye una estructura clara con introducción, desarrollo y conclusión
 5. Añade valor práctico y ejemplos cuando sea apropiado
 6. El contenido debe ser original y engaging
+7. NO incluyas bloques de código markdown (```html, ```markdown, etc.)
+8. Responde ÚNICAMENTE con el contenido HTML limpio, sin prefijos ni sufijos
 
 Genera el contenido completo ahora:`;
 
@@ -132,8 +134,19 @@ Genera el contenido completo ahora:`;
 
     const rawContent = completion.choices[0]?.message?.content || 'Error: No se pudo generar contenido';
     
+    // Clean the content and convert Markdown to HTML
+    let cleanContent = rawContent.trim();
+    
+    // Remove any markdown code block delimiters
+    cleanContent = cleanContent.replace(/^```html\s*\n?/i, '').replace(/\n?\s*```$/i, '');
+    cleanContent = cleanContent.replace(/^```markdown\s*\n?/i, '').replace(/\n?\s*```$/i, '');
+    cleanContent = cleanContent.replace(/^```\s*\n?/i, '').replace(/\n?\s*```$/i, '');
+    
+    // Remove any leading quotes or backticks
+    cleanContent = cleanContent.replace(/^['"`]+|['"`]+$/g, '');
+    
     // Convert Markdown to HTML for rich text display
-    return markdownToHtml(rawContent);
+    return markdownToHtml(cleanContent);
   } catch (error) {
     console.error('Error generating content:', error);
     throw new Error('Error al generar contenido con IA. Verifica tu API key de OpenAI.');
