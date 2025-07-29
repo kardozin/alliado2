@@ -14,6 +14,7 @@ export function PublicationsView({ publications, activeProject }: PublicationsVi
   const [selectedPublication, setSelectedPublication] = useState<Publication | null>(null);
   const [filterPlatform, setFilterPlatform] = useState<string>('all');
   const [showConnectionModal, setShowConnectionModal] = useState(false);
+  const [showAdaptationModal, setShowAdaptationModal] = useState(false);
   const [connectedPlatforms, setConnectedPlatforms] = useState<string[]>(['LinkedIn', 'Twitter/X']);
 
   if (!activeProject) {
