@@ -3,6 +3,7 @@ import { Send, BarChart, Calendar, ExternalLink, Filter, TrendingUp, Settings, L
 import { Publication, Project } from '../types';
 import { RichTextEditor } from './RichTextEditor';
 import { PlatformConnectionModal } from './PlatformConnectionModal';
+import { PlatformAdaptationModal } from './PlatformAdaptationModal';
 
 interface PublicationsViewProps {
   publications: Publication[];
