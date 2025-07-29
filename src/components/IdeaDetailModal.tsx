@@ -177,32 +177,33 @@ export function IdeaDetailModal({ idea, project, isOpen, onClose, onGenerateDraf
 
               {/* AI Generation Preview */}
               <div className="bg-gradient-to-r from-amber-500/5 to-amber-600/5 rounded-xl p-6 border border-amber-500/20">
-              <div className="bg-gray-800/30 rounded-xl p-6 border border-gray-700/40">
-                <div className="flex items-center space-x-3 mb-4">
-                  <Zap className="w-5 h-5 text-gray-300" />
-                  <h4 className="text-md font-semibold text-gray-100">Generación con IA</h4>
+                <div className="bg-gray-800/30 rounded-xl p-6 border border-gray-700/40">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <Zap className="w-5 h-5 text-gray-300" />
+                    <h4 className="text-md font-semibold text-gray-100">Generación con IA</h4>
+                  </div>
+                  <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                    OpenAI GPT-4 utilizará esta idea junto con la configuración de tu proyecto para crear un borrador completo que incluya:
+                  </p>
+                  <ul className="space-y-2 text-sm text-gray-400">
+                    <li className="flex items-center space-x-2">
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
+                      <span>Estructura narrativa alineada con tu audiencia objetivo</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
+                      <span>Tono y voz consistentes con las guías de estilo del proyecto</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
+                      <span>Contenido original y relevante basado en la descripción de la idea</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
+                      <span>Análisis opcional de tono, emoción y optimización SEO (on-demand)</span>
+                    </li>
+                  </ul>
                 </div>
-                <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                  OpenAI GPT-4 utilizará esta idea junto con la configuración de tu proyecto para crear un borrador completo que incluya:
-                </p>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                    <span>Estructura narrativa alineada con tu audiencia objetivo</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                    <span>Tono y voz consistentes con las guías de estilo del proyecto</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                    <span>Contenido original y relevante basado en la descripción de la idea</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                    <span>Análisis opcional de tono, emoción y optimización SEO (on-demand)</span>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>
