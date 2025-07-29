@@ -88,15 +88,28 @@ function parseRSSXML(xmlText: string, feedUrl: string): RSSItem[] {
 // Fetch RSS feed through CORS proxy
 export async function fetchRSSFeed(feedUrl: string): Promise<RSSFeed> {
   try {
-    // Use a CORS proxy service to fetch RSS feeds
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`;
+    // Use Supabase Edge Function to fetch RSS feeds
+    const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/fetch-rss`;
     
-    const response = await fetch(proxyUrl);
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ feedUrl }),
+    });
+    
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
     const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.error);
+    }
+    
     const xmlText = data.contents;
     
     if (!xmlText) {
