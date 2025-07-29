@@ -50,6 +50,7 @@ const dbRowToDraft = (row: any): Draft => ({
 const dbRowToPublication = (row: any): Publication => ({
   id: row.id,
   projectId: row.project_id,
+  ideaId: row.idea_id,
   title: row.title,
   content: row.content,
   platform: row.platform,
@@ -398,6 +399,7 @@ export function usePublications() {
       .from('publications')
       .insert({
         project_id: publicationData.projectId,
+        idea_id: publicationData.ideaId,
         title: publicationData.title,
         content: publicationData.content,
         platform: publicationData.platform,
@@ -419,6 +421,7 @@ export function usePublications() {
     const { data, error } = await supabase
       .from('publications')
       .update({
+        idea_id: updates.ideaId,
         title: updates.title,
         content: updates.content,
         platform: updates.platform,

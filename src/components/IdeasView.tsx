@@ -6,6 +6,7 @@ import { IdeaDetailModal } from './IdeaDetailModal';
 interface IdeasViewProps {
   ideas: Idea[];
   drafts: any[]; // Add drafts to show relationships
+  publications: any[]; // Add publications to show relationships
   activeProject: Project | null;
   onCreateIdea: (idea: Partial<Idea>) => void;
   onDeleteIdea: (ideaId: string) => void;
@@ -13,7 +14,16 @@ interface IdeasViewProps {
   isGeneratingDraft?: boolean;
 }
 
-export function IdeasView({ ideas, drafts, activeProject, onCreateIdea, onDeleteIdea, onGenerateDraft, isGeneratingDraft = false }: IdeasViewProps) {
+export function IdeasView({ 
+  ideas, 
+  drafts, 
+  publications, 
+  activeProject, 
+  onCreateIdea, 
+  onDeleteIdea, 
+  onGenerateDraft, 
+  isGeneratingDraft = false 
+}: IdeasViewProps) {
   const [showNewIdeaForm, setShowNewIdeaForm] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
   const [ideaSource, setIdeaSource] = useState<'direct' | 'text' | 'url' | 'rss'>('direct');
@@ -27,6 +37,15 @@ export function IdeasView({ ideas, drafts, activeProject, onCreateIdea, onDelete
   // Get drafts for a specific idea
   const getDraftsForIdea = (ideaId: string) => {
     return drafts.filter(draft => draft.ideaId === ideaId);
+  };
+
+  // Get publications for a specific idea (through drafts)
+  const getPublicationsForIdea = (ideaId: string) => {
+    const ideaDrafts = getDraftsForIdea(ideaId);
+    return publications.filter(pub => 
+      ideaDrafts.some(draft => draft.title === pub.title.split(' - ')[0]) ||
+      pub.ideaId === ideaId
+    );
   };
 
   const handleDeleteIdea = (ideaId: string, e: React.MouseEvent) => {
@@ -227,7 +246,9 @@ export function IdeasView({ ideas, drafts, activeProject, onCreateIdea, onDelete
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projectIdeas.map((idea, index) => {
               const ideaDrafts = getDraftsForIdea(idea.id);
+              const ideaPublications = getPublicationsForIdea(idea.id);
               const hasDrafts = ideaDrafts.length > 0;
+              const hasPublications = ideaPublications.length > 0;
               
               return (
             <div
@@ -252,6 +273,12 @@ export function IdeasView({ ideas, drafts, activeProject, onCreateIdea, onDelete
                       <span className="text-xs font-medium">{ideaDrafts.length}</span>
                     </div>
                   )}
+                  {hasPublications && (
+                    <div className="flex items-center space-x-1 bg-blue-500/10 text-blue-400 px-2 py-1 rounded-full border border-blue-500/20">
+                      <Send className="w-3 h-3" />
+                      <span className="text-xs font-medium">{ideaPublications.length}</span>
+                    </div>
+                  )}
                   <div className="transition-transform duration-200 group-hover:scale-110">
                   {getStatusIcon(idea.status)}
                   </div>
@@ -273,13 +300,20 @@ export function IdeasView({ ideas, drafts, activeProject, onCreateIdea, onDelete
                 <div className="flex items-center space-x-2">
                   {/* Action buttons - appear on hover to the left of the date */}
                   <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
-                    {hasDrafts && (
+                    {(hasDrafts || hasPublications) && (
                       <button
                         onClick={(e) => handleViewDrafts(idea.id, e)}
-                        className="p-1.5 bg-blue-500/10 text-blue-400 rounded-md hover:bg-blue-500/20 transition-all duration-200 hover:scale-110"
-                        title={`Ver ${ideaDrafts.length} borrador(es)`}
+                        className="p-1.5 bg-blue-500/10 text-blue-400 rounded-md hover:bg-blue-500/20 transition-all duration-200 hover:scale-110 relative"
+                        title={`Ver ${ideaDrafts.length} borrador(es) y ${ideaPublications.length} publicación(es)`}
                       >
                         <Eye className="w-3.5 h-3.5" />
+                        {(hasDrafts || hasPublications) && (
+                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-amber-500 rounded-full flex items-center justify-center">
+                            <span className="text-xs font-bold text-gray-900">
+                              {ideaDrafts.length + ideaPublications.length}
+                            </span>
+                          </div>
+                        )}
                       </button>
                     )}
                     <button

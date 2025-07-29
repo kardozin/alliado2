@@ -8,14 +8,33 @@ import { PlatformAdaptationModal } from './PlatformAdaptationModal';
 interface PublicationsViewProps {
   publications: Publication[];
   activeProject: Project | null;
+  onCreateDraft?: (draftData: Omit<Draft, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onCreatePublication?: (publicationData: Omit<Publication, 'id'>) => void;
 }
 
-export function PublicationsView({ publications, activeProject }: PublicationsViewProps) {
+export function PublicationsView({ 
+  publications, 
+  activeProject, 
+  onCreateDraft, 
+  onCreatePublication 
+}: PublicationsViewProps) {
   const [selectedPublication, setSelectedPublication] = useState<Publication | null>(null);
   const [filterPlatform, setFilterPlatform] = useState<string>('all');
   const [showConnectionModal, setShowConnectionModal] = useState(false);
   const [showAdaptationModal, setShowAdaptationModal] = useState(false);
   const [connectedPlatforms, setConnectedPlatforms] = useState<string[]>(['LinkedIn', 'Twitter/X']);
+
+  const onSaveAdaptationAsDraft = async (draftData: Omit<Draft, 'id' | 'createdAt' | 'updatedAt'>) => {
+    if (onCreateDraft) {
+      await onCreateDraft(draftData);
+    }
+  };
+
+  const onSaveAdaptationAsPublication = async (publicationData: Omit<Publication, 'id'>) => {
+    if (onCreatePublication) {
+      await onCreatePublication(publicationData);
+    }
+  };
 
   if (!activeProject) {
     return (
@@ -284,7 +303,7 @@ export function PublicationsView({ publications, activeProject }: PublicationsVi
           onClose={() => setShowAdaptationModal(false)}
           draft={{
             id: selectedPublication.id,
-            ideaId: '',
+            ideaId: selectedPublication.ideaId || '', // Mantener conexión con idea si existe
             projectId: selectedPublication.projectId,
             title: selectedPublication.title,
             content: selectedPublication.content,
@@ -294,6 +313,8 @@ export function PublicationsView({ publications, activeProject }: PublicationsVi
             updatedAt: selectedPublication.publishedAt
           }}
           project={activeProject}
+          onSaveAsDraft={onSaveAdaptationAsDraft}
+          onSaveAsPublication={onSaveAdaptationAsPublication}
         />
       )}
     </div>

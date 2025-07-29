@@ -196,6 +196,22 @@ function AppContent() {
     }
   };
 
+  const handleCreateManualDraft = async (draftData: Omit<Draft, 'id' | 'createdAt' | 'updatedAt'>) => {
+    try {
+      await createDraft(draftData);
+      showSuccess(
+        'Borrador Creado',
+        'El borrador ha sido creado exitosamente'
+      );
+    } catch (error) {
+      console.error('Error creating draft:', error);
+      showError(
+        'Error al Crear Borrador',
+        'No se pudo crear el borrador'
+      );
+    }
+  };
+
   const handleEditDraft = async (draft: Draft) => {
     try {
       await updateDraft(draft.id, draft);
@@ -334,6 +350,7 @@ function AppContent() {
           <IdeasView
             ideas={ideas}
             drafts={drafts}
+            publications={publications}
             activeProject={activeProject}
             onCreateIdea={handleCreateIdea}
             onDeleteIdea={handleDeleteIdea}
@@ -359,6 +376,8 @@ function AppContent() {
           <PublicationsView
             publications={publications}
             activeProject={activeProject}
+            onCreateDraft={handleCreateManualDraft}
+            onCreatePublication={handleCreatePublicationFromAdaptation}
           />
         );
       case 'analytics':

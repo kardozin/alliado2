@@ -23,6 +23,8 @@ interface PlatformAdaptationModalProps {
   onClose: () => void;
   draft: Draft;
   project: Project;
+  onSaveAsDraft?: (draftData: Omit<Draft, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onSaveAsPublication?: (publicationData: Omit<Publication, 'id'>) => void;
 }
 
 interface PlatformConfig {
@@ -35,11 +37,19 @@ interface PlatformConfig {
   adaptationPrompt: string;
 }
 
-export function PlatformAdaptationModal({ isOpen, onClose, draft, project }: PlatformAdaptationModalProps) {
+export function PlatformAdaptationModal({ 
+  isOpen, 
+  onClose, 
+  draft, 
+  project, 
+  onSaveAsDraft, 
+  onSaveAsPublication 
+}: PlatformAdaptationModalProps) {
   const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
   const [adaptedContent, setAdaptedContent] = useState<string>('');
   const [isAdapting, setIsAdapting] = useState(false);
   const [adaptationComplete, setAdaptationComplete] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const platforms: PlatformConfig[] = [
     {
@@ -145,6 +155,60 @@ export function PlatformAdaptationModal({ isOpen, onClose, draft, project }: Pla
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  const handleSaveAsDraft = async () => {
+    if (!adaptedContent || !selectedPlatform) return;
+    
+    const platform = platforms.find(p => p.id === selectedPlatform);
+    if (!platform || !onSaveAsDraft) return;
+
+    setIsSaving(true);
+    try {
+      await onSaveAsDraft({
+        ideaId: draft.ideaId, // Mantener la conexión con la idea original
+        projectId: project.id,
+        title: `${draft.title} - ${platform.name}`,
+        content: adaptedContent,
+        version: 1,
+        analysis: null
+      });
+      onClose();
+    } catch (error) {
+      console.error('Error saving as draft:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleSaveAsPublication = async () => {
+    if (!adaptedContent || !selectedPlatform) return;
+    
+    const platform = platforms.find(p => p.id === selectedPlatform);
+    if (!platform || !onSaveAsPublication) return;
+
+    setIsSaving(true);
+    try {
+      await onSaveAsPublication({
+        projectId: project.id,
+        title: `${draft.title} - ${platform.name}`,
+        content: adaptedContent,
+        platform: platform.name,
+        publishedAt: new Date(),
+        analysis: draft.analysis || {
+          tone: 'Adaptado',
+          emotion: 'Neutral',
+          readability: 75,
+          keyThemes: ['Adaptación', platform.name],
+          seoScore: 70
+        }
+      });
+      onClose();
+    } catch (error) {
+      console.error('Error saving as publication:', error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -289,6 +353,34 @@ export function PlatformAdaptationModal({ isOpen, onClose, draft, project }: Pla
                               <Download className="w-4 h-4" />
                               <span>Descargar</span>
                             </button>
+                            {onSaveAsDraft && (
+                              <button
+                                onClick={handleSaveAsDraft}
+                                disabled={isSaving}
+                                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all duration-200 disabled:opacity-50"
+                              >
+                                {isSaving ? (
+                                  <Loader className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <FileText className="w-4 h-4" />
+                                )}
+                                <span>Guardar como Borrador</span>
+                              </button>
+                            )}
+                            {onSaveAsPublication && (
+                              <button
+                                onClick={handleSaveAsPublication}
+                                disabled={isSaving}
+                                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-all duration-200 disabled:opacity-50"
+                              >
+                                {isSaving ? (
+                                  <Loader className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <Send className="w-4 h-4" />
+                                )}
+                                <span>Guardar como Final</span>
+                              </button>
+                            )}
                           </div>
                         </div>
                         <div 
@@ -331,6 +423,11 @@ export function PlatformAdaptationModal({ isOpen, onClose, draft, project }: Pla
           <div className="p-6 border-t border-gray-800/60 flex justify-between items-center">
             <div className="text-sm text-gray-400">
               Contenido original: {draft.content.replace(/<[^>]*>/g, '').length} caracteres
+              {adaptedContent && (
+                <span className="ml-4">
+                  Adaptado: {adaptedContent.replace(/<[^>]*>/g, '').length} caracteres
+                </span>
+              )}
             </div>
             <button
               onClick={onClose}

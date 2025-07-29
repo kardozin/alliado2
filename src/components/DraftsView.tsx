@@ -462,6 +462,12 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
           onClose={() => setShowAdaptationModal(false)}
           draft={selectedDraft}
           project={activeProject}
+          onSaveAsDraft={handleCreateManualDraft}
+          onSaveAsPublication={(pubData) => onFinalizeDraft && onFinalizeDraft({
+            ...selectedDraft,
+            title: pubData.title,
+            content: pubData.content
+          })}
         />
       )}
 

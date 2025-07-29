@@ -70,11 +70,17 @@ export interface ContentAnalysis {
 export interface Publication {
   id: string;
   projectId: string;
+  ideaId?: string; // Optional connection to original idea
   title: string;
   content: string;
   platform: string;
   publishedAt: Date;
   analysis: ContentAnalysis;
+  performance?: {
+    views: number;
+    engagement: number;
+    shares: number;
+  };
 }
 
 export type ViewMode = 'projects' | 'ideas' | 'drafts' | 'publications' | 'analytics';
