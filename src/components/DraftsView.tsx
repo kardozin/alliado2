@@ -373,12 +373,9 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                       />
                     </div>
                   ) : (
-                    <RichTextEditor
-                     key={selectedDraft.id}
-                      content={selectedDraft.content}
-                      onChange={() => {}} // Read-only mode
-                      readOnly={true}
-                      className="border-0"
+                    <div 
+                      className="prose prose-invert max-w-none editorial-content"
+                      dangerouslySetInnerHTML={{ __html: selectedDraft.content }}
                     />
                   )}
                 </div>
