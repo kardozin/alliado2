@@ -212,6 +212,22 @@ function AppContent() {
     }
   };
 
+  const handleCreatePublicationFromAdaptation = async (publicationData: any) => {
+    try {
+      await createPublication(publicationData);
+      showSuccess(
+        'Publicación Creada',
+        'La adaptación ha sido guardada como publicación exitosamente'
+      );
+    } catch (error) {
+      console.error('Error creating publication from adaptation:', error);
+      showError(
+        'Error al Crear Publicación',
+        'No se pudo guardar la adaptación como publicación'
+      );
+    }
+  };
+
   const handleEditDraft = async (draft: Draft) => {
     try {
       await updateDraft(draft.id, draft);
