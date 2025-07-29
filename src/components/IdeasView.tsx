@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Lightbulb, ExternalLink, Rss, Youtube, FileText, Clock, CheckCircle, Trash2, Eye } from 'lucide-react';
+import { Plus, Lightbulb, ExternalLink, Rss, Youtube, FileText, Clock, CheckCircle, Trash2, Eye, Send } from 'lucide-react';
 import { Idea, Project } from '../types';
 import { IdeaDetailModal } from './IdeaDetailModal';
 
