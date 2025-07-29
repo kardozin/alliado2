@@ -3,6 +3,7 @@ import { Plus, Lightbulb, ExternalLink, Rss, Youtube, FileText, Clock, CheckCirc
 import { Idea, Project } from '../types';
 import { IdeaDetailModal } from './IdeaDetailModal';
 import { analyzeUrlContent, generateIdeasFromRss } from '../lib/contentAnalysis';
+import { fetchMultipleRSSFeeds, RSSFeed } from '../lib/rssParser';
 
 interface IdeasViewProps {
   ideas: Idea[];
@@ -30,7 +31,7 @@ export function IdeasView({
   const [ideaSource, setIdeaSource] = useState<'direct' | 'text' | 'url' | 'rss'>('direct');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [urlSuggestions, setUrlSuggestions] = useState<{title: string, description: string, category: string} | null>(null);
-  const [rssFeeds, setRssFeeds] = useState<any[]>([]);
+  const [rssFeeds, setRssFeeds] = useState<RSSFeed[]>([]);
   const [selectedRssPost, setSelectedRssPost] = useState<any>(null);
   const [rssIdeasSuggestions, setRssIdeasSuggestions] = useState<any[]>([]);
   const [isLoadingRss, setIsLoadingRss] = useState(false);
@@ -53,35 +54,19 @@ export function IdeasView({
     
     setIsLoadingRss(true);
     try {
-      // Simulate RSS feed loading - in a real app, you'd fetch from RSS feeds
-      // For now, we'll create mock data based on the configured feeds
-      const mockRssData = activeProject.settings.rssFeeds.map((feedUrl, index) => ({
-        id: `feed-${index}`,
-        feedUrl,
-        feedName: feedUrl.includes('techcrunch') ? 'TechCrunch' : 
-                  feedUrl.includes('producthunt') ? 'Product Hunt' :
-                  feedUrl.includes('behance') ? 'Behance' : 'RSS Feed',
-        posts: [
-          {
-            id: `post-${index}-1`,
-            title: `Artículo de ejemplo ${index + 1}`,
-            description: `Descripción del artículo de ejemplo que viene del feed RSS. Este contenido sería extraído del feed real.`,
-            publishedAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
-            url: `${feedUrl}/article-${index + 1}`
-          },
-          {
-            id: `post-${index}-2`,
-            title: `Otro artículo interesante ${index + 1}`,
-            description: `Otra descripción de ejemplo que vendría del feed RSS configurado en el proyecto.`,
-            publishedAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
-            url: `${feedUrl}/article-${index + 2}`
-          }
-        ]
-      }));
+      // Fetch real RSS feeds
+      const feeds = await fetchMultipleRSSFeeds(activeProject.settings.rssFeeds);
       
-      setRssFeeds(mockRssData);
+      if (feeds.length === 0) {
+        // If no feeds loaded successfully, show a message
+        console.warn('No RSS feeds could be loaded');
+        setRssFeeds([]);
+      } else {
+        setRssFeeds(feeds);
+      }
     } catch (error) {
       console.error('Error loading RSS feeds:', error);
+      setRssFeeds([]);
     } finally {
       setIsLoadingRss(false);
     }
@@ -134,7 +119,7 @@ export function IdeasView({
         projectId: activeProject.id,
         source: 'rss',
         status: 'captured',
-        sourceData: `RSS: ${selectedRssPost.title}\n\nURL: ${selectedRssPost.url}\n\nContenido original: ${selectedRssPost.description}`
+        sourceData: `RSS: ${selectedRssPost.title}\n\nURL: ${selectedRssPost.link}\n\nContenido original: ${selectedRssPost.description}`
       });
       
       // Reset RSS state
@@ -362,9 +347,13 @@ export function IdeasView({
                             <h5 className="font-semibold text-gray-100 mb-4 flex items-center space-x-2">
                               <Rss className="w-4 h-4 text-gray-400" />
                               <span>{feed.feedName}</span>
+                              <span className="text-xs text-gray-500">({feed.posts.length} artículos)</span>
                             </h5>
+                            {feed.posts.length === 0 ? (
+                              <p className="text-gray-500 text-sm">No se encontraron artículos en este feed</p>
+                            ) : (
                             <div className="space-y-3">
-                              {feed.posts.map((post: any) => (
+                              {feed.posts.map((post) => (
                                 <div
                                   key={post.id}
                                   className="p-4 bg-gray-800/30 rounded-lg hover:bg-gray-700/40 transition-all duration-200 cursor-pointer group"
@@ -385,7 +374,7 @@ export function IdeasView({
                                         </div>
                                         <div className="flex items-center space-x-1">
                                           <ExternalLink className="w-3 h-3" />
-                                          <span>Ver original</span>
+                                          <a href={post.link} target="_blank" rel="noopener noreferrer" className="hover:text-gray-200">Ver original</a>
                                         </div>
                                       </div>
                                     </div>
@@ -394,6 +383,7 @@ export function IdeasView({
                                 </div>
                               ))}
                             </div>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -426,10 +416,10 @@ export function IdeasView({
                       <div className="flex items-center space-x-4 text-xs text-gray-500">
                         <div className="flex items-center space-x-1">
                           <Calendar className="w-3 h-3" />
-                          <span>{selectedRssPost.publishedAt.toLocaleDateString()}</span>
+                          <span>{new Date(selectedRssPost.publishedAt).toLocaleDateString()}</span>
                         </div>
                         <a 
-                          href={selectedRssPost.url} 
+                          href={selectedRssPost.link} 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors duration-200"
@@ -475,7 +465,7 @@ export function IdeasView({
                       <div className="flex items-center justify-between mb-6">
                         <h4 className="text-lg font-semibold text-gray-100">Leer Post Completo</h4>
                         <button
-                          onClick={handleGenerateRssIdeas}
+                          onClick={() => selectedRssPost && handleGenerateRssIdeas(selectedRssPost)}
                           disabled={isAnalyzing}
                           className="bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                         >
