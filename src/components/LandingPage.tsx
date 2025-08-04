@@ -118,17 +118,17 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
           </p>
 
           {/* CTA Button */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col items-center gap-4">
             <button
-              onClick={() => onGetStarted && onGetStarted()}
+              onClick={onGetStarted}
               className="bg-gray-200 text-black px-12 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition-all duration-300 hover:scale-105 flex items-center space-x-3 mx-auto"
             >
               <span>Crear Cuenta</span>
               <ArrowRight className="w-6 h-6" />
             </button>
             <button
-              onClick={() => onGetStarted && onGetStarted()}
-              className="text-gray-300 hover:text-gray-100 transition-colors duration-200 font-medium px-6 py-4 text-center"
+              onClick={onGetStarted}
+              className="text-gray-300 hover:text-gray-100 transition-colors duration-200 font-medium text-center"
             >
               ¿Ya tienes cuenta? Iniciar sesión
             </button>
@@ -254,7 +254,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             Donde las ideas se transforman en contenido que conecta, convierte y construye audiencias.
           </p>
             <button
-              onClick={() => onGetStarted && onGetStarted()}
+              onClick={onGetStarted}
               className="bg-gray-200 text-black px-12 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition-all duration-300 hover:scale-105 flex items-center space-x-3 mx-auto"
             >
               <span>Comenzar Gratis</span>
