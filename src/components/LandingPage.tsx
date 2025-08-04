@@ -109,11 +109,11 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
 
           {/* Tagline */}
           <h2 className="text-3xl lg:text-4xl font-semibold serif text-gray-200 mb-8 leading-tight max-w-3xl mx-auto">
-            Centro de Comando de Contenido Estratégico
+            Centro de Creación de Contenido Estratégico
           </h2>
           
           <p className="text-xl text-gray-400 mb-16 max-w-2xl mx-auto leading-relaxed">
-            Plataforma inteligente de gestión de contenido impulsada por IA para creadores, 
+            Plataforma inteligente de gestión de con asistencia IA para creadores, 
             empresas y estrategas digitales. Desde la idea hasta la publicación.
           </p>
 
