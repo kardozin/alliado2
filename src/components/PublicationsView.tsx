@@ -81,7 +81,7 @@ export function PublicationsView({
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Publications List */}
-          <div className="lg:col-span-1 space-y-4">
+          <div className="lg:col-span-1 space-y-4 lg:max-w-sm">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-300 serif">Publicaciones</h2>
             </div>
@@ -141,9 +141,9 @@ export function PublicationsView({
           </div>
 
           {/* Publication Detail */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 lg:max-w-none">
             {selectedPublication ? (
-              <div className="glass-effect rounded-xl border nyt-border h-full flex flex-col animate-scale-in">
+              <div className="glass-effect rounded-xl border nyt-border min-h-[80vh] flex flex-col animate-scale-in">
                 {/* Header */}
                 <div className="p-6 border-b nyt-border">
                   <div className="flex items-start justify-between mb-6">
@@ -184,7 +184,7 @@ export function PublicationsView({
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 p-6 overflow-y-auto">
+                <div className="flex-1 p-6 overflow-y-auto max-w-4xl">
                   <RichTextEditor
                     content={selectedPublication.content}
                     onChange={() => {}} // Read-only mode

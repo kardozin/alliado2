@@ -1,5 +1,5 @@
 import React from 'react';
-import { LogOut } from 'lucide-react';
+import { LogOut, Menu, X } from 'lucide-react';
 import { ProjectSettingsPanel } from './ProjectSettingsPanel';
 import { 
   FolderOpen, 
@@ -21,6 +21,8 @@ interface SidebarProps {
   onProjectSelect: (project: Project) => void;
   onNewProject: () => void;
   onUpdateProject: (project: Project) => void;
+  isOpen?: boolean;
+  onToggle?: () => void;
 }
 
 export function Sidebar({ 
@@ -30,7 +32,9 @@ export function Sidebar({
   activeProject, 
   onProjectSelect,
   onNewProject,
-  onUpdateProject
+  onUpdateProject,
+  isOpen = true,
+  onToggle
 }: SidebarProps) {
   const [showSettings, setShowSettings] = React.useState(false);
   const { signOut } = useAuth();
@@ -53,7 +57,29 @@ export function Sidebar({
 
   return (
     <>
-      <div className="w-72 bg-gray-950 border-r border-gray-800/60 h-screen flex flex-col animate-fade-in">
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden animate-fade-in"
+          onClick={onToggle}
+        />
+      )}
+      
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={onToggle}
+        className="fixed top-4 left-4 z-40 lg:hidden p-3 bg-gray-900/90 backdrop-blur-sm border border-gray-800/60 rounded-xl text-gray-300 hover:text-gray-100 transition-all duration-200"
+      >
+        {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+      </button>
+
+      <div className={`
+        fixed lg:relative top-0 left-0 h-screen z-40 lg:z-auto
+        w-72 bg-gray-950 border-r border-gray-800/60 flex flex-col
+        transform transition-transform duration-300 ease-out lg:transform-none
+        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        animate-fade-in
+      `}>
       {/* Header */}
       <div className="p-8 border-b nyt-border">
         <div className="flex items-center space-x-3 mb-2">
@@ -72,7 +98,7 @@ export function Sidebar({
             <div className="flex-1">
               <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Proyecto Activo</p>
               <p className="font-semibold text-gray-200 text-sm leading-tight">{activeProject.name}</p>
-              <p className="text-xs text-gray-400 mt-1 line-clamp-2">{activeProject.description}</p>
+              <p className="text-xs text-gray-400 mt-1 line-clamp-1">{activeProject.description}</p>
             </div>
             <button
             onClick={(e) => {

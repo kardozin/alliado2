@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Settings } from 'lucide-react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AuthForm } from './components/AuthForm';
+import { LandingPage } from './components/LandingPage';
 import { Sidebar } from './components/Sidebar';
 import { ProjectsView } from './components/ProjectsView';
 import { IdeasView } from './components/IdeasView';
@@ -17,6 +18,8 @@ import { ViewMode, Project, Idea, Draft } from './types';
 
 function AppContent() {
   const [currentView, setCurrentView] = useState<ViewMode>('projects');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
   const [showProjectSettings, setShowProjectSettings] = useState(false);
   const [settingsProject, setSettingsProject] = useState<Project | null>(null);
   const [isGeneratingDraft, setIsGeneratingDraft] = useState(false);
@@ -54,6 +57,18 @@ function AppContent() {
 
   if (!user) {
     return <AuthForm />;
+  }
+
+  // Show landing page for first-time users or when explicitly requested
+  if (showLanding && projects.length === 0) {
+    return (
+      <LandingPage 
+        onGetStarted={() => {
+          setShowLanding(false);
+          setCurrentView('projects');
+        }} 
+      />
+    );
   }
 
   // Show configuration message if Supabase is not configured
@@ -95,6 +110,7 @@ function AppContent() {
 
   const handleProjectSelect = (project: Project) => {
     setActiveProject(project);
+    setSidebarOpen(false); // Close sidebar on mobile after selection
     // Only change to ideas view if we're currently on projects view
     if (currentView === 'projects') {
       setCurrentView('ideas');
@@ -467,8 +483,10 @@ function AppContent() {
         onProjectSelect={handleProjectSelect}
         onNewProject={handleNewProject}
         onUpdateProject={handleUpdateProject}
+        isOpen={sidebarOpen}
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
       />
-      <main className="flex-1 overflow-y-auto bg-gray-950">
+      <main className="flex-1 overflow-y-auto bg-gray-950 lg:ml-0">
         {renderCurrentView()}
       </main>
       
