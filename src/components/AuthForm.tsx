@@ -209,15 +209,6 @@ export function AuthForm() {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="text-center mt-8 animate-fade-in">
-          <p className="text-xs text-gray-500">
-            Creado por{' '}
-            <span className="text-gray-300 font-medium">Marcelo Cardozo</span>
-            <br />
-            Implementado por IA © 2025
-          </p>
-        </div>
       </div>
     </div>
   );
