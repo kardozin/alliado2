@@ -9,8 +9,6 @@ import {
   Target, 
   Globe,
   ArrowRight,
-  CheckCircle,
-  Sparkles,
   Users,
   TrendingUp,
   Shield,
@@ -26,38 +24,32 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
     {
       icon: Lightbulb,
       title: 'Captura Inteligente de Ideas',
-      description: 'Desde texto, URLs, feeds RSS o ideas directas. La inspiración nunca se pierde.',
-      color: 'amber'
+      description: 'Desde texto, URLs, feeds RSS o ideas directas. La inspiración nunca se pierde.'
     },
     {
       icon: Brain,
       title: 'Generación con IA',
-      description: 'OpenAI GPT-4 crea borradores completos basados en tu configuración de proyecto.',
-      color: 'purple'
+      description: 'OpenAI GPT-4 crea borradores completos basados en tu configuración de proyecto.'
     },
     {
       icon: Target,
       title: 'Análisis Profundo',
-      description: 'Métricas de legibilidad, SEO, tono y consistencia de voz automáticas.',
-      color: 'green'
+      description: 'Métricas de legibilidad, SEO, tono y consistencia de voz automáticas.'
     },
     {
       icon: Globe,
       title: 'Adaptación Multi-Plataforma',
-      description: 'Convierte contenido para YouTube, Instagram, LinkedIn, Twitter y más.',
-      color: 'blue'
+      description: 'Convierte contenido para YouTube, Instagram, LinkedIn, Twitter y más.'
     },
     {
       icon: BarChart3,
       title: 'Analytics Avanzado',
-      description: 'Insights de escritura y patrones de contenido que guían tu estrategia.',
-      color: 'indigo'
+      description: 'Insights de escritura y patrones de contenido que guían tu estrategia.'
     },
     {
       icon: Shield,
       title: 'Gestión de Voz',
-      description: 'Mantén consistencia en todos tus proyectos con guías de estilo personalizadas.',
-      color: 'red'
+      description: 'Mantén consistencia en todos tus proyectos con guías de estilo personalizadas.'
     }
   ];
 
@@ -103,69 +95,63 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
   return (
     <div className="min-h-screen bg-gray-950 overflow-y-auto">
       {/* Hero Section */}
-      <div className="relative">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-gray-950 to-purple-500/5"></div>
-        
-        <div className="relative max-w-7xl mx-auto px-8 py-20">
-          <div className="text-center animate-fade-in">
-            {/* Logo */}
-            <div className="flex items-center justify-center space-x-4 mb-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-2xl">
-                <span className="text-3xl font-bold serif text-black">A</span>
-              </div>
-              <h1 className="text-5xl lg:text-6xl font-bold serif text-gray-100">
-                Allia.do
-              </h1>
+      <div className="max-w-4xl mx-auto px-8 py-20">
+        <div className="text-center animate-fade-in">
+          {/* Logo */}
+          <div className="flex items-center justify-center space-x-4 mb-12">
+            <div className="w-16 h-16 bg-gray-200 rounded-2xl flex items-center justify-center">
+              <span className="text-3xl font-bold serif text-black">A</span>
             </div>
+            <h1 className="text-5xl lg:text-6xl font-bold serif text-gray-100">
+              Allia.do
+            </h1>
+          </div>
 
-            {/* Tagline */}
-            <h2 className="text-2xl lg:text-3xl font-semibold text-gray-300 mb-6 leading-tight">
-              Centro de Comando de Contenido Estratégico
-            </h2>
-            
-            <p className="text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Plataforma inteligente de gestión de contenido impulsada por IA para creadores, 
-              empresas y estrategas digitales. Desde la idea hasta la publicación.
-            </p>
+          {/* Tagline */}
+          <h2 className="text-3xl lg:text-4xl font-semibold serif text-gray-200 mb-8 leading-tight max-w-3xl mx-auto">
+            Centro de Comando de Contenido Estratégico
+          </h2>
+          
+          <p className="text-xl text-gray-400 mb-16 max-w-2xl mx-auto leading-relaxed">
+            Plataforma inteligente de gestión de contenido impulsada por IA para creadores, 
+            empresas y estrategas digitales. Desde la idea hasta la publicación.
+          </p>
 
-            {/* CTA Button */}
-            {onGetStarted && (
-              <button
+          {/* CTA Button */}
+          {onGetStarted && (
+            <button
               onClick={onGetStarted}
-              className="bg-gradient-to-r from-amber-500 to-amber-600 text-black px-12 py-4 rounded-xl text-lg font-bold hover:from-amber-400 hover:to-amber-500 transition-all duration-300 hover:scale-105 hover:shadow-2xl flex items-center space-x-3 mx-auto"
-              >
-              <Sparkles className="w-6 h-6" />
+              className="bg-gray-200 text-black px-12 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition-all duration-300 hover:scale-105 flex items-center space-x-3 mx-auto"
+            >
               <span>Comenzar Ahora</span>
               <ArrowRight className="w-6 h-6" />
-              </button>
-            )}
-          </div>
+            </button>
+          )}
         </div>
       </div>
 
       {/* Features Section */}
-      <div className="max-w-7xl mx-auto px-8 py-20">
+      <div className="max-w-4xl mx-auto px-8 py-20 border-t border-gray-800/60">
         <div className="text-center mb-16 animate-slide-up">
-          <h3 className="text-3xl lg:text-4xl font-bold serif text-gray-100 mb-6">
+          <h3 className="text-3xl font-bold serif text-gray-100 mb-6">
             Funcionalidades Principales
           </h3>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Todo lo que necesitas para crear, optimizar y publicar contenido estratégico de clase mundial
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Todo lo que necesitas para crear, optimizar y publicar contenido estratégico
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
               <div
                 key={feature.title}
-                className="glass-effect rounded-2xl p-8 border border-gray-800/60 hover:border-gray-700/60 transition-all duration-300 hover:transform hover:-translate-y-2 animate-fade-in"
+                className="glass-effect rounded-xl p-8 border nyt-border hover:bg-gray-800/20 transition-all duration-300 animate-fade-in"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className={`w-16 h-16 bg-${feature.color}-500/10 rounded-2xl flex items-center justify-center mb-6`}>
-                  <Icon className={`w-8 h-8 text-${feature.color}-400`} />
+                <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center mb-6">
+                  <Icon className="w-6 h-6 text-gray-300" />
                 </div>
                 <h4 className="text-xl font-semibold serif text-gray-100 mb-4">
                   {feature.title}
@@ -180,46 +166,39 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
       </div>
 
       {/* Workflow Section */}
-      <div className="bg-gray-900/20 py-20">
-        <div className="max-w-7xl mx-auto px-8">
+      <div className="bg-gray-900/20 py-20 border-t border-gray-800/60">
+        <div className="max-w-4xl mx-auto px-8">
           <div className="text-center mb-16 animate-slide-up">
-            <h3 className="text-3xl lg:text-4xl font-bold serif text-gray-100 mb-6">
-              Flujo de Trabajo Inteligente
+            <h3 className="text-3xl font-bold serif text-gray-100 mb-6">
+              Flujo de Trabajo
             </h3>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
               Desde la captura de ideas hasta la publicación final, cada paso está optimizado para máxima eficiencia
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-8">
             {workflow.map((step, index) => {
               const Icon = step.icon;
               return (
                 <div
                   key={step.step}
-                  className="relative animate-fade-in"
+                  className="flex items-start space-x-6 animate-fade-in"
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
-                  {/* Connection line */}
-                  {index < workflow.length - 1 && (
-                    <div className="hidden lg:block absolute top-8 left-full w-8 h-0.5 bg-gradient-to-r from-gray-600 to-transparent z-10"></div>
-                  )}
-                  
-                  <div className="glass-effect rounded-2xl p-6 border border-gray-800/60 hover:border-gray-700/60 transition-all duration-300 relative">
-                    {/* Step number */}
-                    <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center text-black font-bold text-sm shadow-lg">
-                      {step.step}
-                    </div>
-                    
-                    <div className="pt-4">
-                      <Icon className="w-12 h-12 text-amber-400 mb-4" />
-                      <h4 className="text-lg font-semibold serif text-gray-100 mb-3">
-                        {step.title}
-                      </h4>
-                      <p className="text-gray-400 text-sm leading-relaxed">
-                        {step.description}
-                      </p>
-                    </div>
+                  <div className="flex-shrink-0 w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center">
+                    <span className="text-lg font-bold text-black">{step.step}</span>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-xl font-semibold serif text-gray-100 mb-2">
+                      {step.title}
+                    </h4>
+                    <p className="text-gray-400 leading-relaxed">
+                      {step.description}
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0 w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center">
+                    <Icon className="w-6 h-6 text-gray-300" />
                   </div>
                 </div>
               );
@@ -229,31 +208,28 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
       </div>
 
       {/* Technology Section */}
-      <div className="max-w-7xl mx-auto px-8 py-20">
+      <div className="max-w-4xl mx-auto px-8 py-20 border-t border-gray-800/60">
         <div className="text-center mb-16 animate-slide-up">
-          <h3 className="text-3xl lg:text-4xl font-bold serif text-gray-100 mb-6">
-            Tecnología de Vanguardia
+          <h3 className="text-3xl font-bold serif text-gray-100 mb-6">
+            Tecnología
           </h3>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Construido con las mejores tecnologías para garantizar rendimiento, seguridad y escalabilidad
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Construido con tecnologías modernas para garantizar rendimiento y seguridad
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
-            { name: 'OpenAI GPT-4', description: 'Generación de contenido avanzada', color: 'green' },
-            { name: 'React + TypeScript', description: 'Frontend moderno y tipado', color: 'blue' },
-            { name: 'Supabase', description: 'Backend escalable y seguro', color: 'emerald' },
-            { name: 'Tailwind CSS', description: 'Diseño responsivo y elegante', color: 'cyan' }
+            { name: 'OpenAI GPT-4', description: 'Generación de contenido avanzada' },
+            { name: 'React + TypeScript', description: 'Frontend moderno y tipado' },
+            { name: 'Supabase', description: 'Backend escalable y seguro' },
+            { name: 'Tailwind CSS', description: 'Diseño responsivo y elegante' }
           ].map((tech, index) => (
             <div
               key={tech.name}
-              className="glass-effect rounded-xl p-6 border border-gray-800/60 text-center hover:border-gray-700/60 transition-all duration-300 animate-fade-in"
+              className="glass-effect rounded-xl p-6 border nyt-border text-center hover:bg-gray-800/20 transition-all duration-300 animate-fade-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className={`w-12 h-12 bg-${tech.color}-500/10 rounded-xl flex items-center justify-center mx-auto mb-4`}>
-                <CheckCircle className={`w-6 h-6 text-${tech.color}-400`} />
-              </div>
               <h4 className="font-semibold text-gray-100 mb-2">{tech.name}</h4>
               <p className="text-sm text-gray-400">{tech.description}</p>
             </div>
@@ -261,53 +237,23 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="bg-gray-900/20 py-20">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            {[
-              { number: '10x', label: 'Más Rápido', description: 'Generación de contenido vs. manual' },
-              { number: '95%', label: 'Consistencia', description: 'En voz y tono de marca' },
-              { number: '∞', label: 'Plataformas', description: 'Adaptación ilimitada de contenido' }
-            ].map((stat, index) => (
-              <div
-                key={stat.label}
-                className="animate-fade-in"
-                style={{ animationDelay: `${index * 200}ms` }}
-              >
-                <div className="text-5xl lg:text-6xl font-bold serif text-amber-400 mb-4">
-                  {stat.number}
-                </div>
-                <div className="text-xl font-semibold text-gray-100 mb-2">
-                  {stat.label}
-                </div>
-                <div className="text-gray-400">
-                  {stat.description}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* CTA Section */}
-      <div className="max-w-7xl mx-auto px-8 py-20">
-        <div className="glass-effect rounded-3xl p-12 border border-gray-800/60 text-center animate-slide-up">
-          <h3 className="text-3xl lg:text-4xl font-bold serif text-gray-100 mb-6">
+      <div className="max-w-4xl mx-auto px-8 py-20 border-t border-gray-800/60">
+        <div className="glass-effect rounded-2xl p-12 border nyt-border text-center animate-slide-up">
+          <h3 className="text-3xl font-bold serif text-gray-100 mb-6">
             ¿Listo para Revolucionar tu Contenido?
           </h3>
-          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
             Únete a la nueva era de creación de contenido estratégico. 
             Donde las ideas se transforman en contenido que conecta, convierte y construye audiencias.
           </p>
           {onGetStarted && (
             <button
-            onClick={onGetStarted}
-            className="bg-gradient-to-r from-amber-500 to-amber-600 text-black px-12 py-4 rounded-xl text-lg font-bold hover:from-amber-400 hover:to-amber-500 transition-all duration-300 hover:scale-105 hover:shadow-2xl flex items-center space-x-3 mx-auto"
+              onClick={onGetStarted}
+              className="bg-gray-200 text-black px-12 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition-all duration-300 hover:scale-105 flex items-center space-x-3 mx-auto"
             >
-            <Zap className="w-6 h-6" />
-            <span>Comenzar Gratis</span>
-            <ArrowRight className="w-6 h-6" />
+              <span>Comenzar Gratis</span>
+              <ArrowRight className="w-6 h-6" />
             </button>
           )}
         </div>
@@ -315,7 +261,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
 
       {/* Footer */}
       <div className="border-t border-gray-800/60 py-12">
-        <div className="max-w-7xl mx-auto px-8 text-center">
+        <div className="max-w-4xl mx-auto px-8 text-center">
           <div className="flex items-center justify-center space-x-3 mb-4">
             <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
               <span className="text-lg font-bold serif text-black">A</span>
