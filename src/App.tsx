@@ -57,7 +57,13 @@ function AppContent() {
 
   if (!user) {
     return (
-      <LandingPage onGetStarted={() => setShowAuthModal(true)} />
+      <>
+        <LandingPage onGetStarted={() => setShowAuthModal(true)} />
+        {/* Auth Modal */}
+        {showAuthModal && (
+          <AuthForm onClose={() => setShowAuthModal(false)} />
+        )}
+      </>
     );
   }
 
@@ -482,11 +488,6 @@ function AppContent() {
       
       {/* Toast Notifications */}
       <ToastContainer messages={messages} onClose={removeToast} />
-      
-      {/* Auth Modal */}
-      {showAuthModal && (
-        <AuthForm onClose={() => setShowAuthModal(false)} />
-      )}
       
       {/* Project Settings Panel */}
       {settingsProject && (
