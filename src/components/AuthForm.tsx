@@ -92,19 +92,7 @@ export function AuthForm({ onClose }: AuthFormProps) {
         </div>
 
         {/* Form */}
-        <div className="bg-gray-950 rounded-2xl p-8 border border-gray-800/60 animate-scale-in shadow-2xl">
-          {/* Close button */}
-          <div className="relative">
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-all duration-200 hover:bg-gray-800/50 rounded-lg hover:rotate-90"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
-          </div>
-          
+        <div className="glass-effect rounded-2xl p-8 border border-gray-800/60 animate-slide-up">
           <div className="mb-6">
             <h2 className="text-2xl font-bold serif text-gray-100 mb-2">
               {isSignUp ? 'Crear Cuenta' : 'Iniciar Sesión'}
@@ -121,7 +109,7 @@ export function AuthForm({ onClose }: AuthFormProps) {
           {(!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) && (
             <div className="mb-6 p-4 bg-gray-800/30 border border-gray-700/40 rounded-lg animate-fade-in">
               <div className="flex items-center space-x-3">
-                <AlertTriangle className="w-5 h-5 text-gray-300 flex-shrink-0" />
+                <AlertCircle className="w-5 h-5 text-gray-300 flex-shrink-0" />
                 <div>
                   <p className="text-gray-300 text-sm font-medium">Configuración Requerida</p>
                   <p className="text-gray-400 text-xs">
@@ -159,7 +147,6 @@ export function AuthForm({ onClose }: AuthFormProps) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-gray-900/50 border border-gray-800/60 rounded-xl text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all duration-200"
                   className="w-full pl-12 pr-4 py-4 bg-gray-900/50 border border-gray-800/60 rounded-xl text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400/50 transition-all duration-200"
                   placeholder="tu@email.com"
                   required
@@ -232,9 +219,9 @@ export function AuthForm({ onClose }: AuthFormProps) {
             </button>
           </div>
         </div>
-      </div>
-    </>
+
       </div>
     </div>
+    </>
   );
 }
