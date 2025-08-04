@@ -19,6 +19,7 @@ import { ViewMode, Project, Idea, Draft } from './types';
 function AppContent() {
   const [currentView, setCurrentView] = useState<ViewMode>('projects');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showProjectSettings, setShowProjectSettings] = useState(false);
   const [settingsProject, setSettingsProject] = useState<Project | null>(null);
   const [isGeneratingDraft, setIsGeneratingDraft] = useState(false);
@@ -56,10 +57,7 @@ function AppContent() {
 
   if (!user) {
     return (
-      <div>
-        <LandingPage onGetStarted={() => {}} />
-        <AuthForm />
-      </div>
+      <LandingPage onGetStarted={() => setShowAuthModal(true)} />
     );
   }
 
@@ -484,6 +482,11 @@ function AppContent() {
       
       {/* Toast Notifications */}
       <ToastContainer messages={messages} onClose={removeToast} />
+      
+      {/* Auth Modal */}
+      {showAuthModal && (
+        <AuthForm onClose={() => setShowAuthModal(false)} />
+      )}
       
       {/* Project Settings Panel */}
       {settingsProject && (

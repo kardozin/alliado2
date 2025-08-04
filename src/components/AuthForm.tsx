@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-export function AuthForm() {
+interface AuthFormProps {
+  onClose?: () => void;
+}
+
+export function AuthForm({ onClose }: AuthFormProps) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -64,7 +68,15 @@ export function AuthForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950/95 backdrop-blur-sm flex items-center justify-center p-4">
+    <>
+      {/* Overlay */}
+      <div 
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-fade-in"
+        onClick={onClose}
+      />
+      
+      {/* Modal */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
@@ -80,7 +92,19 @@ export function AuthForm() {
         </div>
 
         {/* Form */}
-        <div className="glass-effect rounded-2xl p-8 border border-gray-800/60 animate-slide-up">
+        <div className="bg-gray-950 rounded-2xl p-8 border border-gray-800/60 animate-scale-in shadow-2xl">
+          {/* Close button */}
+          <div className="relative">
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-all duration-200 hover:bg-gray-800/50 rounded-lg hover:rotate-90"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+          </div>
+          
           <div className="mb-6">
             <h2 className="text-2xl font-bold serif text-gray-100 mb-2">
               {isSignUp ? 'Crear Cuenta' : 'Iniciar Sesión'}
@@ -208,7 +232,8 @@ export function AuthForm() {
             </button>
           </div>
         </div>
-
+      </div>
+    </>
       </div>
     </div>
   );
