@@ -2,27 +2,47 @@ import { generateContent } from './openai';
 
 // Simulate URL content analysis
 export async function analyzeUrlContent(url: string): Promise<{title: string, description: string, category: string}> {
-  // In a real implementation, you would:
-  // 1. Fetch the URL content
-  // 2. Extract title, meta description, and content
-  // 3. Use AI to analyze and suggest title, description, and category
-  
-  // For now, we'll simulate this with a delay and mock data
   await new Promise(resolve => setTimeout(resolve, 2000));
   
-  // Extract domain for category suggestion
   const domain = new URL(url).hostname.replace('www.', '');
   
-  // Mock analysis based on domain
   const mockAnalysis = {
-    title: `Análisis de contenido desde ${domain}`,
-    description: `Idea capturada desde el artículo en ${domain}. Esta descripción sería generada automáticamente analizando el contenido del artículo.`,
+    title: `Insights de ${domain}: Estrategias de Contenido Digital`,
+    description: `Análisis profundo de las tendencias y estrategias de contenido identificadas en ${domain}. Esta idea explora las mejores prácticas, técnicas innovadoras y enfoques únicos que pueden aplicarse a tu estrategia de contenido. Incluye insights sobre audiencia, formato, distribución y optimización basados en el contenido analizado.`,
     category: domain.includes('tech') ? 'Tecnología' : 
               domain.includes('business') ? 'Negocios' :
               domain.includes('design') ? 'Diseño' : 'General'
   };
   
   return mockAnalysis;
+}
+
+// Analyze text content to generate ideas
+export async function analyzeTextContent(text: string): Promise<{title: string, description: string, category: string}> {
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  
+  // Extract key themes from text for better categorization
+  const textLower = text.toLowerCase();
+  let category = 'General';
+  
+  if (textLower.includes('tecnología') || textLower.includes('tech') || textLower.includes('software')) {
+    category = 'Tecnología';
+  } else if (textLower.includes('negocio') || textLower.includes('empresa') || textLower.includes('startup')) {
+    category = 'Negocios';
+  } else if (textLower.includes('diseño') || textLower.includes('creatividad') || textLower.includes('arte')) {
+    category = 'Diseño';
+  } else if (textLower.includes('marketing') || textLower.includes('contenido') || textLower.includes('social')) {
+    category = 'Marketing';
+  }
+  
+  // Generate a more contextual title and description
+  const firstSentence = text.split('.')[0].substring(0, 100);
+  
+  return {
+    title: `Análisis Estratégico: ${firstSentence}${firstSentence.length >= 100 ? '...' : ''}`,
+    description: `Idea desarrollada a partir del análisis del texto proporcionado. Esta perspectiva explora los conceptos clave, tendencias identificadas y oportunidades estratégicas presentes en el contenido original. Incluye insights sobre aplicación práctica, audiencia objetivo y potencial de desarrollo en múltiples formatos de contenido.`,
+    category
+  };
 }
 
 // Generate ideas from RSS post

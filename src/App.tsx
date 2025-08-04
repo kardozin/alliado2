@@ -444,6 +444,15 @@ function AppContent() {
             onDeleteDraft={handleDeleteDraft}
             onRegenerateDraft={handleRegenerateDraft}
             onFinalizeDraft={handleFinalizeDraft}
+            onUpdateDraft={async (draftId: string, updates: Partial<Draft>) => {
+              try {
+                await updateDraft(draftId, updates);
+                showSuccess('Borrador Actualizado', 'Los cambios han sido guardados exitosamente');
+              } catch (error) {
+                console.error('Error updating draft:', error);
+                showError('Error', 'No se pudieron guardar los cambios');
+              }
+            }}
             isAnalyzing={isAnalyzingContent}
             isRegenerating={isAnalyzingContent}
           />

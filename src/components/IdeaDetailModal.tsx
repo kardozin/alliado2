@@ -13,6 +13,7 @@ import {
   Loader
 } from 'lucide-react';
 import { Idea, Project } from '../types';
+import { EditableTitle } from './EditableTitle';
 
 interface IdeaDetailModalProps {
   idea: Idea;
@@ -90,7 +91,11 @@ export function IdeaDetailModal({ idea, project, isOpen, onClose, onGenerateDraf
                   </div>
                 </div>
                 <h2 className="text-3xl font-bold serif text-gray-100 leading-tight">
-                  {idea.title}
+                  <EditableTitle
+                    value={idea.title}
+                    onSave={(newTitle) => onUpdateIdea && onUpdateIdea(idea.id, { title: newTitle })}
+                    className="text-3xl font-bold serif text-gray-100 leading-tight"
+                  />
                 </h2>
               </div>
               <button

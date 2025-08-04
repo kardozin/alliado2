@@ -4,6 +4,7 @@ import { Idea, Project } from '../types';
 import { IdeaDetailModal } from './IdeaDetailModal';
 import { analyzeUrlContent, generateIdeasFromRss } from '../lib/contentAnalysis';
 import { fetchMultipleRSSFeeds, RSSFeed } from '../lib/rssParser';
+import { EditableTitle } from './EditableTitle';
 
 interface IdeasViewProps {
   ideas: Idea[];
@@ -13,6 +14,7 @@ interface IdeasViewProps {
   onCreateIdea: (idea: Partial<Idea>) => void;
   onDeleteIdea: (ideaId: string) => void;
   onGenerateDraft: (idea: Idea) => void;
+  onUpdateIdea: (ideaId: string, updates: Partial<Idea>) => void;
   isGeneratingDraft?: boolean;
 }
 
@@ -24,6 +26,7 @@ export function IdeasView({
   onCreateIdea, 
   onDeleteIdea, 
   onGenerateDraft, 
+  onUpdateIdea,
   isGeneratingDraft = false 
 }: IdeasViewProps) {
   const [showNewIdeaForm, setShowNewIdeaForm] = useState(false);
@@ -312,7 +315,7 @@ export function IdeasView({
                     placeholder="https://ejemplo.com/articulo"
                   />
                 )}
-                {ideaSource === 'url' && newIdea.sourceData.trim() && (
+                {(ideaSource === 'url' || ideaSource === 'text') && newIdea.sourceData.trim() && !urlSuggestions && (
                   <button
                     onClick={handleAnalyzeUrl}
                     disabled={isAnalyzing}
@@ -321,9 +324,9 @@ export function IdeasView({
                     {isAnalyzing ? (
                       <Loader className="w-4 h-4 animate-spin" />
                     ) : (
-                      <Globe className="w-4 h-4" />
+                      ideaSource === 'url' ? <Globe className="w-4 h-4" /> : <FileText className="w-4 h-4" />
                     )}
-                    <span>{isAnalyzing ? 'Analizando...' : 'Analizar URL'}</span>
+                    <span>{isAnalyzing ? 'Analizando...' : ideaSource === 'url' ? 'Analizar URL' : 'Analizar Texto'}</span>
                   </button>
                 )}
               </div>
@@ -538,16 +541,23 @@ export function IdeasView({
             )}
 
             {/* URL Analysis Results */}
-            {ideaSource === 'url' && urlSuggestions && (
+            {(ideaSource === 'url' || ideaSource === 'text') && urlSuggestions && (
               <div className="mb-6 p-4 bg-gray-800/30 border border-gray-700/40 rounded-xl">
                 <h4 className="font-semibold text-gray-300 mb-3 flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4" />
-                  <span>Análisis Completado</span>
+                  <span>Idea Generada</span>
                 </h4>
-                <div className="text-sm text-gray-300 space-y-2">
-                  <p><strong>Título sugerido:</strong> {urlSuggestions.title}</p>
-                  <p><strong>Categoría sugerida:</strong> {urlSuggestions.category}</p>
-                  <p><strong>Descripción:</strong> {urlSuggestions.description}</p>
+                <div className="bg-gray-900/30 rounded-xl p-6 border border-gray-800/40">
+                  <h5 className="font-semibold text-gray-100 text-lg mb-3">{urlSuggestions.title}</h5>
+                  <p className="text-gray-300 mb-4 leading-relaxed">{urlSuggestions.description}</p>
+                  <div className="flex items-center space-x-3">
+                    <span className="bg-gray-800/50 text-gray-300 px-3 py-1 rounded-full text-sm font-medium">
+                      {urlSuggestions.category}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {ideaSource === 'url' ? 'Generada desde URL' : 'Generada desde texto'}
+                    </span>
+                  </div>
                 </div>
               </div>
             )}
@@ -621,7 +631,11 @@ export function IdeasView({
               </div>
 
               <h3 className="text-lg font-semibold serif text-gray-100 group-hover:text-white transition-colors duration-300 mb-3 leading-tight">
-                {idea.title}
+                <EditableTitle
+                  value={idea.title}
+                  onSave={(newTitle) => onUpdateIdea(idea.id, { title: newTitle })}
+                  className="text-lg font-semibold serif text-gray-100 group-hover:text-white transition-colors duration-300 leading-tight"
+                />
               </h3>
               
               <p className="text-gray-400 group-hover:text-gray-300 text-sm mb-4 line-clamp-3 leading-relaxed transition-colors duration-300">

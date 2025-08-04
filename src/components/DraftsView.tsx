@@ -8,6 +8,7 @@ import { DraftAnalysisPanel } from './DraftAnalysisPanel';
 import { ContentOptimizer } from './ContentOptimizer';
 import { PlatformAdaptationModal } from './PlatformAdaptationModal';
 import { PreviewModal } from './PreviewModal';
+import { EditableTitle } from './EditableTitle';
 
 interface DraftsViewProps {
   drafts: Draft[];
@@ -16,6 +17,7 @@ interface DraftsViewProps {
   onDeleteDraft: (draftId: string) => void;
   onRegenerateDraft: (draftId: string) => void;
   onFinalizeDraft?: (draft: Draft) => void;
+  onUpdateDraft?: (draftId: string, updates: Partial<Draft>) => void;
   isAnalyzing?: boolean;
   isRegenerating?: boolean;
 }
@@ -245,7 +247,15 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
                 {/* Header */}
                 <div className="p-6 border-b nyt-border flex items-center justify-between">
                   <div>
-                    <h2 className="font-semibold serif text-gray-100 text-xl">{selectedDraft.title}</h2>
+                    <EditableTitle
+                      value={selectedDraft.title}
+                      onSave={(newTitle) => {
+                        const updatedDraft = { ...selectedDraft, title: newTitle };
+                        onEditDraft(updatedDraft);
+                        setSelectedDraft(updatedDraft);
+                      }}
+                      className="font-semibold serif text-gray-100 text-xl"
+                    />
                     <p className="text-sm text-gray-400 mt-1">Versión {selectedDraft.version} • {selectedDraft.updatedAt.toLocaleDateString()}</p>
                   </div>
                   <div className="flex items-center space-x-2">
