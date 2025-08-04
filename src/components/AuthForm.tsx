@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, X, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface AuthFormProps {
@@ -92,7 +92,17 @@ export function AuthForm({ onClose }: AuthFormProps) {
         </div>
 
         {/* Form */}
-        <div className="glass-effect rounded-2xl p-8 border border-gray-800/60 animate-slide-up">
+        <div className="bg-gray-950 rounded-2xl p-8 border border-gray-800/60 animate-scale-in shadow-2xl relative">
+          {/* Close button */}
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-all duration-200 hover:bg-gray-800/50 rounded-lg hover:rotate-90"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+          
           <div className="mb-6">
             <h2 className="text-2xl font-bold serif text-gray-100 mb-2">
               {isSignUp ? 'Crear Cuenta' : 'Iniciar Sesión'}
@@ -109,7 +119,7 @@ export function AuthForm({ onClose }: AuthFormProps) {
           {(!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) && (
             <div className="mb-6 p-4 bg-gray-800/30 border border-gray-700/40 rounded-lg animate-fade-in">
               <div className="flex items-center space-x-3">
-                <AlertCircle className="w-5 h-5 text-gray-300 flex-shrink-0" />
+                <AlertTriangle className="w-5 h-5 text-gray-300 flex-shrink-0" />
                 <div>
                   <p className="text-gray-300 text-sm font-medium">Configuración Requerida</p>
                   <p className="text-gray-400 text-xs">
