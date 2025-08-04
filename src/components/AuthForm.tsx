@@ -223,7 +223,7 @@ export function AuthForm({ onClose }: AuthFormProps) {
                 setError(null);
                 setSuccess(null);
               }}
-              className="text-gray-300 hover:text-gray-100 transition-colors duration-200 font-medium mt-2"
+              className="text-gray-300 hover:text-gray-100 transition-colors duration-200 font-medium mt-2 block"
             >
               {isSignUp ? 'Iniciar Sesión' : 'Crear Cuenta'}
             </button>

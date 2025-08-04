@@ -60,6 +60,7 @@ export function DraftsView({ drafts, activeProject, onEditDraft, onDeleteDraft, 
         updatedAt: new Date()
       };
       onEditDraft(updatedDraft);
+      setSelectedDraft(updatedDraft); // Update local state immediately
       setIsEditing(false);
     }
   };
