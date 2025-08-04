@@ -64,7 +64,7 @@ export function AuthForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-950/95 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">

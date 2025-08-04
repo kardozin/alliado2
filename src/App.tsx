@@ -19,7 +19,6 @@ import { ViewMode, Project, Idea, Draft } from './types';
 function AppContent() {
   const [currentView, setCurrentView] = useState<ViewMode>('projects');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [showLanding, setShowLanding] = useState(true);
   const [showProjectSettings, setShowProjectSettings] = useState(false);
   const [settingsProject, setSettingsProject] = useState<Project | null>(null);
   const [isGeneratingDraft, setIsGeneratingDraft] = useState(false);
@@ -56,18 +55,11 @@ function AppContent() {
   }
 
   if (!user) {
-    return <AuthForm />;
-  }
-
-  // Show landing page for first-time users or when explicitly requested
-  if (showLanding && projects.length === 0) {
     return (
-      <LandingPage 
-        onGetStarted={() => {
-          setShowLanding(false);
-          setCurrentView('projects');
-        }} 
-      />
+      <div>
+        <LandingPage onGetStarted={() => {}} />
+        <AuthForm />
+      </div>
     );
   }
 

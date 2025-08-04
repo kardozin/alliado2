@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 interface LandingPageProps {
-  onGetStarted: () => void;
+  onGetStarted?: () => void;
 }
 
 export function LandingPage({ onGetStarted }: LandingPageProps) {
@@ -130,14 +130,16 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             </p>
 
             {/* CTA Button */}
-            <button
+            {onGetStarted && (
+              <button
               onClick={onGetStarted}
               className="bg-gradient-to-r from-amber-500 to-amber-600 text-black px-12 py-4 rounded-xl text-lg font-bold hover:from-amber-400 hover:to-amber-500 transition-all duration-300 hover:scale-105 hover:shadow-2xl flex items-center space-x-3 mx-auto"
-            >
+              >
               <Sparkles className="w-6 h-6" />
               <span>Comenzar Ahora</span>
               <ArrowRight className="w-6 h-6" />
-            </button>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -298,14 +300,16 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             Únete a la nueva era de creación de contenido estratégico. 
             Donde las ideas se transforman en contenido que conecta, convierte y construye audiencias.
           </p>
-          <button
+          {onGetStarted && (
+            <button
             onClick={onGetStarted}
             className="bg-gradient-to-r from-amber-500 to-amber-600 text-black px-12 py-4 rounded-xl text-lg font-bold hover:from-amber-400 hover:to-amber-500 transition-all duration-300 hover:scale-105 hover:shadow-2xl flex items-center space-x-3 mx-auto"
-          >
+            >
             <Zap className="w-6 h-6" />
             <span>Comenzar Gratis</span>
             <ArrowRight className="w-6 h-6" />
-          </button>
+            </button>
+          )}
         </div>
       </div>
 
