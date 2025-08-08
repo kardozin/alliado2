@@ -1,42 +1,46 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
 let supabase: any;
+let isSupabaseConfigured = false;
 
-// In production, show a user-friendly message instead of throwing
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables. Please configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Netlify.');
-  
-  // Create a mock client that will show helpful error messages
-  supabase = {
-    auth: {
-      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
-      signInWithPassword: () => Promise.resolve({ error: { message: 'Supabase no está configurado. Contacta al administrador.' } }),
-      signUp: () => Promise.resolve({ error: { message: 'Supabase no está configurado. Contacta al administrador.' } }),
-      signOut: () => Promise.resolve({ error: null })
-    },
-    from: () => ({
-      select: () => ({ order: () => Promise.resolve({ data: [], error: null }) }),
-      insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase no está configurado' } }) }) }),
-      update: () => ({ eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase no está configurado' } }) }) }) }),
-      delete: () => ({ eq: () => Promise.resolve({ error: { message: 'Supabase no está configurado' } }) })
-    })
-  };
-} else {
-  // Validate URL format
+async function initSupabase() {
   try {
-    new URL(supabaseUrl);
-  } catch (error) {
-    throw new Error(`Invalid VITE_SUPABASE_URL format: "${supabaseUrl}". Must be a complete URL like https://your-project-id.supabase.co`);
-  }
+    const res = await fetch('/api/supabase-config');
+    if (!res.ok) throw new Error('Missing config');
+    const { url, anonKey } = await res.json();
 
-  supabase = createClient(supabaseUrl, supabaseAnonKey);
+    if (!url || !anonKey) throw new Error('Missing config');
+
+    // Validate URL format
+    new URL(url);
+
+    supabase = createClient(url, anonKey);
+    isSupabaseConfigured = true;
+  } catch (error) {
+    console.error('Missing Supabase environment variables. Please configure them on the server.');
+
+    // Create a mock client that will show helpful error messages
+    supabase = {
+      auth: {
+        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+        onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+        signInWithPassword: () => Promise.resolve({ error: { message: 'Supabase no está configurado. Contacta al administrador.' } }),
+        signUp: () => Promise.resolve({ error: { message: 'Supabase no está configurado. Contacta al administrador.' } }),
+        signOut: () => Promise.resolve({ error: null })
+      },
+      from: () => ({
+        select: () => ({ order: () => Promise.resolve({ data: [], error: null }) }),
+        insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase no está configurado' } }) }) }),
+        update: () => ({ eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase no está configurado' } }) }) }) }),
+        delete: () => ({ eq: () => Promise.resolve({ error: { message: 'Supabase no está configurado' } }) })
+      })
+    };
+  }
 }
 
-export { supabase };
+await initSupabase();
+
+export { supabase, isSupabaseConfigured };
 
 export type Database = {
   public: {

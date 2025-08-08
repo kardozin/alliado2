@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, AlertCircle, X, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { isSupabaseConfigured } from '../lib/supabase';
 
 interface AuthFormProps {
   onClose?: () => void;
@@ -24,8 +25,8 @@ export function AuthForm({ onClose }: AuthFormProps) {
     setSuccess(null);
 
     // Check if Supabase is configured
-    if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-      setError('La aplicación no está configurada correctamente. Las variables de entorno de Supabase no están disponibles. Por favor, contacta al administrador para configurar VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en Netlify.');
+    if (!isSupabaseConfigured) {
+      setError('La aplicación no está configurada correctamente. Las variables de entorno de Supabase no están disponibles. Por favor, contacta al administrador para configurarlas en el servidor.');
       setLoading(false);
       return;
     }
@@ -116,7 +117,7 @@ export function AuthForm({ onClose }: AuthFormProps) {
           </div>
 
           {/* Configuration Warning */}
-          {(!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) && (
+          {!isSupabaseConfigured && (
             <div className="mb-6 p-4 bg-gray-800/30 border border-gray-700/40 rounded-lg animate-fade-in">
               <div className="flex items-center space-x-3">
                 <AlertTriangle className="w-5 h-5 text-gray-300 flex-shrink-0" />

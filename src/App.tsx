@@ -15,6 +15,7 @@ import { useProjects, useIdeas, useDrafts, usePublications } from './hooks/useSu
 import { useToast } from './hooks/useToast';
 import { generateContent } from './lib/openai';
 import { ViewMode, Project, Idea, Draft } from './types';
+import { isSupabaseConfigured } from './lib/supabase';
 
 function AppContent() {
   const [currentView, setCurrentView] = useState<ViewMode>('projects');
@@ -34,9 +35,6 @@ function AppContent() {
   
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   
-  // Check if Supabase is configured
-  const isSupabaseConfigured = !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
-
   // Show configuration message if Supabase is not configured
   if (!isSupabaseConfigured) {
     return (
