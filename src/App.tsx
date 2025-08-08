@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Settings } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AuthForm } from './components/AuthForm';
 import { LandingPage } from './components/LandingPage';
@@ -14,7 +13,15 @@ import { ToastContainer } from './components/Toast';
 import { useProjects, useIdeas, useDrafts, usePublications } from './hooks/useSupabaseData';
 import { useToast } from './hooks/useToast';
 import { generateContent } from './lib/openai';
-import { ViewMode, Project, Idea, Draft } from './types';
+import { ViewMode, Project, Idea, Draft, Publication } from './types';
+
+interface NewProjectData {
+  name?: string;
+  description?: string;
+  contentType?: string;
+  targetAudience?: string;
+  tone?: string;
+}
 
 function AppContent() {
   const [currentView, setCurrentView] = useState<ViewMode>('projects');
@@ -37,6 +44,13 @@ function AppContent() {
   // Check if Supabase is configured
   const isSupabaseConfigured = !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
 
+  // Set active project when projects load
+  useEffect(() => {
+    if (projects.length > 0 && !activeProject) {
+      setActiveProject(projects[0]);
+    }
+  }, [projects, activeProject]);
+
   // Show configuration message if Supabase is not configured
   if (!isSupabaseConfigured) {
     return (
@@ -49,13 +63,6 @@ function AppContent() {
       </>
     );
   }
-
-  // Set active project when projects load
-  React.useEffect(() => {
-    if (projects.length > 0 && !activeProject) {
-      setActiveProject(projects[0]);
-    }
-  }, [projects, activeProject]);
 
   if (loading) {
     return (
@@ -89,7 +96,7 @@ function AppContent() {
     }
   };
 
-  const handleNewProject = async (projectData?: any) => {
+  const handleNewProject = async (projectData?: NewProjectData) => {
     try {
       const newProject = await createProject({
         name: projectData?.name || 'Nuevo Proyecto',
@@ -249,7 +256,7 @@ function AppContent() {
     }
   };
 
-  const handleCreatePublicationFromAdaptation = async (publicationData: any) => {
+  const handleCreatePublicationFromAdaptation = async (publicationData: Omit<Publication, 'id'>) => {
     try {
       await createPublication(publicationData);
       showSuccess(
